@@ -27,51 +27,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <main className="min-h-screen bg-gray-50 text-gray-900">
-          <header className="bg-white shadow-sm">
-            <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-              <h1 className="text-xl font-bold">NextMerce</h1>
-              <input
-                placeholder="Search products..."
-                className="border rounded-xl px-4 py-2 w-1/2"
-              />
-              <div className="flex gap-4 text-sm">
-                <button>Login</button>
-                <button className="bg-black text-white px-4 py-2 rounded-xl">
-                  Cart
-                </button>
-              </div>
-            </div>
-
-            {/* Navbar */}
-            <nav className="border-t">
-              <div className="max-w-7xl mx-auto px-4 py-2 flex gap-6 text-sm">
-                <span className="font-medium">Home</span>
-                <span>Shop</span>
-                <span>Contact</span>
-                <span>Blog</span>
-              </div>
-            </nav>
-          </header>
-
-          {/* Content */}
-          <div>
-            {children}
-          </div>
-
-          {/* Footer */}
-          <footer className="bg-white mt-10 border-t">
-            <div className="max-w-7xl mx-auto px-4 py-6 text-sm text-gray-500 flex justify-between">
-              <p>© 2026 NextMerce</p>
-              <div className="flex gap-4">
-                <span>Privacy</span>
-                <span>Terms</span>
-              </div>
-            </div>
-          </footer>
-        </main>
-      </body>
+      <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
 }

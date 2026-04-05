@@ -1,8 +1,46 @@
 @import "tailwindcss";
 
+/* @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap"); */
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  --bg-base: #09090b;
+  --bg-surface: #0f0f12;
+  --bg-elevated: #161619;
+  --bg-hover: #1c1c21;
+
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  /* Gold accent palette */
+  --gold: #c9a84c;
+  --gold-light: #e4c97e;
+  --gold-dim: rgba(201, 168, 76, 0.12);
+  --gold-glow: rgba(201, 168, 76, 0.25);
+
+  --danger: #e05b5b;
+  --danger-dim: rgba(224, 91, 91, 0.12);
+
+  --success: #4caf82;
+  --success-dim: rgba(76, 175, 130, 0.12);
+
+  --text-primary: #f5f0e8;
+  --text-secondary: #8a8478;
+  --text-muted: #3f3c38;
+
+  --sidebar-w: 268px;
+  --header-h: 64px;
+
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-xl: 22px;
+
+  --shadow-gold: 0 0 32px rgba(201, 168, 76, 0.15);
+  --shadow-deep: 0 8px 40px rgba(0, 0, 0, 0.7);
 }
 
 @theme inline {
