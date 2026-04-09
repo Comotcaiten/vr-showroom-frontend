@@ -3,7 +3,13 @@ import { Hero } from "@/components/layout/hero";
 import { Section } from "@/components/layout/section";
 import { Button } from "@/components/ui/button";
 
-export default function Home() {
+export default async function Home() {
+  await new Promise((resovle) => {
+    setTimeout(() => {
+      resovle("intentional delay");
+    }, 2000);
+  });
+  
   return (
     <>
       {/* Centered Hero */}
@@ -61,6 +67,7 @@ export default function Home() {
           }
         />
       </Section>
+
     </>
   );
 }
