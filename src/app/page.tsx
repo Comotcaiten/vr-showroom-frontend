@@ -4,9 +4,9 @@ import FeaturedProducts from "@/components/landing/featured-products";
 
 export default function Home() {
   return (
-    <div>
+    <main className="">
       <HeroSection />
       <FeaturedProducts />
-    </div>
+    </main>
   );
 }

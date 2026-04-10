@@ -31,7 +31,7 @@ export default function HeroSection() {
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6 max-w-5xl">
             WRW - Layout You&apos;ve Furniture, Discover What&apos;s Launching
           </h1>
-          <p>
+          <p className="py-4">
             A community platform for creators to showcase their apps, AI tools,
             Saas products, and creative projects. Authentic launches, real
             builders, genuine feedback.
