@@ -1,3 +1,5 @@
 export default function Home() {
-  return <div className=""></div>;
+  return <section className="w-full">
+    <h1>Hello</h1>
+  </section>;
 }

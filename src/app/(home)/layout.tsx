@@ -1,4 +1,5 @@
-// app/(main)/layout.tsx
+"use client";
+// app/(home)/layout.tsx
 import Header from "@/components/common/header";
 import Footer from "@/components/common/footer";
 

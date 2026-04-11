@@ -1,8 +1,9 @@
 "use client";
+// components/common/navbar.tsx
+
 import { LogOutIcon, Moon, SettingsIcon, Sun, User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,65 +14,70 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useTheme } from "next-themes";
 
 const Navbar = () => {
-  const { theme, setTheme } = useTheme();
+  const { setTheme } = useTheme();
+
   return (
-    <nav className="p-4 flex items-center justify-between">
-      {/* LEFT */}
+    <nav className="sticky top-0 z-40 flex h-15.25 w-full shrink-0 items-center justify-between border-b bg-background/80 px-4 backdrop-blur supports-backdrop-filter:bg-background/60">
+      {/* LEFT — sidebar toggle + breadcrumb area */}
+      <div className="flex items-center gap-2">
+        <SidebarTrigger className="-ml-1" />
+        <div className="hidden sm:flex items-center gap-1 text-sm text-muted-foreground">
+          <Link href="/dashboard" className="hover:text-foreground transition-colors">
+            Dashboard
+          </Link>
+        </div>
+      </div>
 
-      {/* RIGHT */}
-      <div className="flex items-center gap-4">
-        <Link href="/">Dashboard</Link>
-
+      {/* RIGHT — theme toggle + avatar */}
+      <div className="flex items-center gap-2">
+        {/* Theme toggle */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon">
-              <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-              <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg">
+              <Sun className="h-4 w-4 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+              <Moon className="absolute h-4 w-4 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
               <span className="sr-only">Toggle theme</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setTheme("light")}>
-              Light
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("dark")}>
-              Dark
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("system")}>
-              System
-            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("light")}>Light</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("dark")}>Dark</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("system")}>System</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
+        {/* Avatar */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Avatar>
-              <AvatarImage src="https://avatars.githubusercontent.com/u/93661423?v=4&size=64" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
+            <button className="rounded-full outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+              <Avatar className="h-8 w-8 cursor-pointer">
+                <AvatarImage src="https://avatars.githubusercontent.com/u/93661423?v=4&size=64" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent sideOffset={10}>
+          <DropdownMenuContent align="end" sideOffset={8}>
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuItem>
-                <User className="h-[1.2rem] w-[1.2rem] mr-2" />
+                <User className="mr-2 h-4 w-4" />
                 Profile
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <SettingsIcon className="h-[1.2rem] w-[1.2rem] mr-2" />
+                <SettingsIcon className="mr-2 h-4 w-4" />
                 Settings
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem variant="destructive">
-                <LogOutIcon className="h-[1.2rem] w-[1.2rem] mr-2" />
-                LogOut
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
+            <DropdownMenuItem variant="destructive">
+              <LogOutIcon className="mr-2 h-4 w-4" />
+              Log out
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
