@@ -28,16 +28,20 @@ import {
   BarChart3,
   Settings,
   Zap,
+  ArmchairIcon,
+  TagIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const NAV_MAIN = [
-  { label: "Dashboard",  href: "/dashboard",           icon: LayoutDashboard },
-  { label: "Products",   href: "/dashboard/products",  icon: Package },
-  { label: "Orders",     href: "/dashboard/orders",    icon: ShoppingCart },
-  { label: "Customers",  href: "/dashboard/customers", icon: Users },
-  { label: "Analytics",  href: "/dashboard/analytics", icon: BarChart3 },
+  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Brands", href: "/dashboard/brands", icon: Package },
+  { label: "Categories", href: "/dashboard/categories", icon: TagIcon },
+  { label: "Furnitures", href: "/dashboard/furnitures", icon: ArmchairIcon },
+  { label: "Orders", href: "/dashboard/orders", icon: ShoppingCart },
+  { label: "Customers", href: "/dashboard/customers", icon: Users },
+  { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
 ];
 
 const NAV_SETTINGS = [
@@ -95,7 +99,7 @@ export function AppSidebar() {
         <SidebarHeader className="border-b py-4 px-3">
           <Link
             href="/"
-            className="flex items-center gap-2 font-bold text-base group overflow-hidden"
+            className="flex items-center gap-2 font-bold text-base group"
           >
             <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-transform group-hover:scale-110">
               <Zap className="h-4 w-4" />

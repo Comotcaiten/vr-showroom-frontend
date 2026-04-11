@@ -21,12 +21,15 @@ const Navbar = () => {
   const { setTheme } = useTheme();
 
   return (
-    <nav className="sticky top-0 z-40 flex h-15.25 w-full shrink-0 items-center justify-between border-b bg-background/80 px-4 backdrop-blur supports-backdrop-filter:bg-background/60">
+    <nav className="sticky top-0 z-40 flex h-15.25 w-full shrink-0 items-center justify-between border-b bg-primary-foreground/80 px-4 backdrop-blur supports-backdrop-filter:bg-primary-foreground/60">
       {/* LEFT — sidebar toggle + breadcrumb area */}
       <div className="flex items-center gap-2">
         <SidebarTrigger className="-ml-1" />
         <div className="hidden sm:flex items-center gap-1 text-sm text-muted-foreground">
-          <Link href="/dashboard" className="hover:text-foreground transition-colors">
+          <Link
+            href="/dashboard"
+            className="hover:text-foreground transition-colors"
+          >
             Dashboard
           </Link>
         </div>
@@ -44,9 +47,15 @@ const Navbar = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setTheme("light")}>Light</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("dark")}>Dark</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("system")}>System</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("light")}>
+              Light
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("dark")}>
+              Dark
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("system")}>
+              System
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
