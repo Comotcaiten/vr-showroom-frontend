@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Zap, GitBranchIcon, OrigamiIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import Logo from "../common/logo";
 
 const FOOTER_LINKS = {
   Product: [
@@ -35,12 +36,7 @@ export default function Footer() {
         <div className="grid grid-cols-2 gap-8 md:grid-cols-5">
           {/* Brand column */}
           <div className="col-span-2 md:col-span-2">
-            <Link href="/" className="flex items-center gap-2 font-bold text-lg group w-fit">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-transform group-hover:scale-110">
-                <Zap className="h-4 w-4" />
-              </span>
-              <span>MyBrand</span>
-            </Link>
+            <Logo/>
             <p className="mt-3 text-sm text-muted-foreground leading-relaxed max-w-xs">
               Building something remarkable. Fast, reliable, and crafted with care.
             </p>

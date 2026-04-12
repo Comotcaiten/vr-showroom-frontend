@@ -1,8 +1,8 @@
 "use client";
 // app/src/(admin)/dashboard/layout.tsx
 
-import { AppSidebar } from "@/components/common/app-sidebar";
-import Navbar from "@/components/common/navbar";
+import { AppSidebar } from "@/components/layout/app-sidebar";
+import Navbar from "@/components/layout/navbar-dashboard";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
 export default function DashboardLayout({

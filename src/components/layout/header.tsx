@@ -4,25 +4,12 @@ import React, { useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-import { HomeIcon, LucideIcon, UserIcon, Menu, X, Zap } from "lucide-react";
+import { HomeIcon, LucideIcon, UserIcon, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import Logo from "../common/logo";
 
-
-const Logo = () => {
-    return (
-          <Link
-            href="/"
-            className="flex items-center gap-2 font-bold text-lg tracking-tight shrink-0 group"
-          >
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-transform group-hover:scale-110">
-              <Zap className="h-4 w-4" />
-            </span>
-            <span className="text-foreground">MyBrand</span>
-          </Link>
-    );
-}
 
 const NavLink = ({
     label,
@@ -175,7 +162,7 @@ export default function Header() {
         <header className="sticky top-0 z-50 border-b w-full border-border/60 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
             <div className="wrapper px-12">
                 <div className="flex h-16 items-center justify-between">
-                    <Logo />
+                    <Logo/>
 
                     {/* Desktop Nav */}
                     <DesktopNav items={NAV_ITEMS} />

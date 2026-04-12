@@ -33,6 +33,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Logo from "../common/logo";
 
 const NAV_MAIN = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -97,20 +98,7 @@ export function AppSidebar() {
       <Sidebar collapsible="icon">
         {/* Logo */}
         <SidebarHeader className="border-b py-4 px-3">
-          <Link
-            href="/"
-            className="flex items-center gap-2 font-bold text-base group"
-          >
-            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-transform group-hover:scale-110">
-              <Zap className="h-4 w-4" />
-            </span>
-            {/* Hide brand name when collapsed */}
-            {!collapsed && (
-              <span className="truncate transition-all duration-200">
-                VR-Showroom
-              </span>
-            )}
-          </Link>
+          <Logo collapsed={collapsed}/>
         </SidebarHeader>
 
         <SidebarContent>

@@ -1,7 +1,7 @@
 "use client";
 // app/(home)/layout.tsx
-import Header from "@/components/common/header";
-import Footer from "@/components/common/footer";
+import Header from "@/components/layout/header";
+import Footer from "@/components/layout/footer";
 
 export default function MainLayout({
   children,

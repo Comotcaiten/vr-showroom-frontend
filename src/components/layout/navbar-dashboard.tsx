@@ -17,7 +17,7 @@ import {
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useTheme } from "next-themes";
 
-const Navbar = () => {
+export default function Navbar () {
   const { setTheme } = useTheme();
 
   return (
@@ -92,6 +92,4 @@ const Navbar = () => {
       </div>
     </nav>
   );
-};
-
-export default Navbar;
+}
