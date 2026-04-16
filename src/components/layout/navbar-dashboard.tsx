@@ -1,5 +1,6 @@
 "use client";
 // components/common/navbar.tsx
+import React, { useState } from "react";
 
 import { LogOutIcon, Moon, SettingsIcon, Sun, User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -8,17 +9,17 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useTheme } from "next-themes";
+import AuthContainer from "../common/auth-container";
 
-export default function Navbar () {
+export default function Navbar() {
+
   const { setTheme } = useTheme();
+  const [isSignedIn, setIsSignedIn] = useState(true);
 
   return (
     <nav className="sticky top-0 z-40 flex h-15.25 w-full shrink-0 items-center justify-between border-b bg-primary-foreground/80 px-4 backdrop-blur supports-backdrop-filter:bg-primary-foreground/60">
@@ -60,35 +61,10 @@ export default function Navbar () {
         </DropdownMenu>
 
         {/* Avatar */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className="rounded-full outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-              <Avatar className="h-8 w-8 cursor-pointer">
-                <AvatarImage src="https://avatars.githubusercontent.com/u/93661423?v=4&size=64" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" sideOffset={8}>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
-                Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <SettingsIcon className="mr-2 h-4 w-4" />
-                Settings
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive">
-              <LogOutIcon className="mr-2 h-4 w-4" />
-              Log out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <AuthContainer
+          isSignedIn={isSignedIn}
+          setIsSignedIn={setIsSignedIn}
+        />
       </div>
     </nav>
   );

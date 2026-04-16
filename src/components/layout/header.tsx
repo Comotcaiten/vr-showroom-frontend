@@ -4,11 +4,12 @@ import React, { useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-import { HomeIcon, LucideIcon, UserIcon, Menu, X } from "lucide-react";
+import { HomeIcon, LucideIcon, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import Logo from "../common/logo";
+import Logo from "@/components/common/logo";
+import AuthContainer from "@/components/common/auth-container";
 
 
 const NavLink = ({
@@ -37,50 +38,6 @@ const NavLink = ({
             <Icon className="size-4" />
             <span>{label}</span>
         </Link>
-    );
-}
-
-const AuthContainer = ({ isSignedIn, setIsSignedIn }: { isSignedIn: boolean, setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>> }) => {
-    return (
-        <div className="hidden md:flex items-center gap-2 shrink-0">
-            {isSignedIn ? (
-                <>
-                    <Button asChild>
-                        <Link href="/">USER: A</Link>
-                    </Button>
-
-                    <Button variant="ghost" size="icon">
-                        <UserIcon className="size-4" />
-                    </Button>
-
-                    {/* Demo logout */}
-                    <Button
-                        variant="ghost"
-                        onClick={() => setIsSignedIn(false)}
-                    >
-                        Logout
-                    </Button>
-                </>
-            ) : (
-                <>
-                    <Button variant="ghost" asChild>
-                        <Link href="/login">Login</Link>
-                    </Button>
-
-                    <Button asChild>
-                        <Link href="/register">Register</Link>
-                    </Button>
-
-                    {/* Demo login */}
-                    <Button
-                        variant="ghost"
-                        onClick={() => setIsSignedIn(true)}
-                    >
-                        Mock Login
-                    </Button>
-                </>
-            )}
-        </div>
     );
 }
 
@@ -174,7 +131,8 @@ export default function Header() {
                     />
 
                     {/* Mobile Menu */}
-                    <MobileMenu items={NAV_ITEMS} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+                    <MobileMenu 
+                    items={NAV_ITEMS} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
                 </div>
             </div>
         </header>

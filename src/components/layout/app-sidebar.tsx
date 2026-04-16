@@ -27,7 +27,6 @@ import {
   Users,
   BarChart3,
   Settings,
-  Zap,
   ArmchairIcon,
   TagIcon,
 } from "lucide-react";
@@ -97,7 +96,7 @@ export function AppSidebar() {
       {/* collapsible="icon" → sidebar shrinks to icon-only width */}
       <Sidebar collapsible="icon">
         {/* Logo */}
-        <SidebarHeader className="border-b py-4 px-3">
+        <SidebarHeader className="py-4 px-3">
           <Logo collapsed={collapsed}/>
         </SidebarHeader>
 
