@@ -2,12 +2,7 @@ import { cn } from "@/lib/utils";
 import { Zap } from "lucide-react";
 import Link from "next/link";
 
-interface ILogo {
-    collapsed?: boolean;
-}
-
-
-const Logo = ({ collapsed }: ILogo) => {
+const Logo = ({ collapsed }: { collapsed?: boolean}) => {
     return (
         <Link href="/" className="flex items-center gap-2 font-bold text-lg group w-fit">
             <span className={cn(
