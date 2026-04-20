@@ -33,7 +33,7 @@ const formSchema = z.object({
         .max(100, "Description must be at most 100 characters."),
 })
 
-export function BrandForm() {
+export function BugReportForm() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -62,7 +62,7 @@ export function BrandForm() {
     return (
         <Card className="w-full sm:max-w-md">
             <CardHeader>
-                <CardTitle>Brand Form</CardTitle>
+                <CardTitle>Bug Report</CardTitle>
                 <CardDescription>
                     Help us improve by reporting bugs you encounter.
                 </CardDescription>
