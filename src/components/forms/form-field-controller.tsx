@@ -16,7 +16,7 @@ import {
 } from "../ui/input-group";
 
 interface FormFieldControllerProps<T extends FieldValues> {
-  control: Control<T>;
+  control?: Control<T>;
   name: Path<T>;
   label: string;
   id: string;

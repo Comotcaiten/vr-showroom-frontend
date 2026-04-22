@@ -9,9 +9,12 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/context/auth-context";
 import { LogOutIcon, SettingsIcon, UserIcon } from "lucide-react";
 
-export default function AvartarContainer({ setIsSignedIn }: { setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>> }) {
+// { setIsSignedIn }: { setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>> }
+export default function AvartarContainer() {
+    const { logout } = useAuth();
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -37,7 +40,7 @@ export default function AvartarContainer({ setIsSignedIn }: { setIsSignedIn: Rea
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem variant="destructive"
-                    onClick={() => setIsSignedIn(false)}
+                    onClick={logout}
                 >
                     {/* Demo logout */}
                     <LogOutIcon className="mr-2 h-4 w-4" />

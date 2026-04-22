@@ -6,6 +6,10 @@ import "./globals.css";
 
 import { ThemeProvider } from "@/components/provider/theme-provider";
 
+import { Toaster } from "@/components/ui/sonner";
+
+import { AuthProvider } from "@/context/auth-context";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -39,8 +43,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+         <AuthProvider>{children}</AuthProvider>
+
         </ThemeProvider>
+          <Toaster />
       </body>
     </html>
   );

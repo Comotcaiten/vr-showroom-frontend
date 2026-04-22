@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import Logo from "@/components/common/logo";
 import AuthContainer from "@/components/common/auth-container";
+import { useAuth } from "@/context/auth-context";
 
 
 const NavLink = ({
@@ -106,11 +107,10 @@ const MobileMenu = ({ items, mobileOpen, setMobileOpen }: { items: NavItem[], mo
 
 export default function Header() {
 
-    const [isSignedIn, setIsSignedIn] = useState(true);
     const [mobileOpen, setMobileOpen] = useState(false);
 
     const NAV_ITEMS = [
-        { label: "Item 1", href: "/item-1", icon: HomeIcon },
+        { label: "Brand", href: "/brand", icon: HomeIcon },
         { label: "Item 2", href: "/item-2", icon: HomeIcon },
         { label: "Item 3", href: "/item-3", icon: HomeIcon },
     ];
@@ -125,10 +125,7 @@ export default function Header() {
                     <DesktopNav items={NAV_ITEMS} />
 
                     {/* Auth Buttons */}
-                    <AuthContainer
-                        isSignedIn={isSignedIn}
-                        setIsSignedIn={setIsSignedIn}
-                    />
+                    <AuthContainer/>
 
                     {/* Mobile Menu */}
                     <MobileMenu 
