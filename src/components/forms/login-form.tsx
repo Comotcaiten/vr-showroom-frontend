@@ -26,8 +26,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
-import { LoginShchema } from "@/validations/user_validations";
+import usersValidation from "@/validations/user_validations";
 import { useAuth } from "@/context/auth-context";
+
+const LoginShchema = usersValidation.login;
 
 export function LoginForm() {
 

@@ -1,54 +1,57 @@
-import * as z from "zod";
+import { z } from "zod";
+class UsersValidation {
+  // BASE (giống Joi base)
+  base = z.object({
+    name: z
+      .string()
+      .min(2, "Name must be at least 2 characters long.")
+      .regex(/^[a-zA-Z0-9_]+$/, "Don't contain special character.")
+      .optional(),
 
-export const SignUpSchema = z.object({
-  name: z
-    .string()
-    .min(2, { error: "Name must be at least 2 characters long." })
-    .regex(/[a-zA-Z]/, { error: "Contain at least one letter." })
-    .regex(/^[a-zA-Z0-9_]+$/, { error: "Don't contain special character." })
-    .trim(),
-  email: z.email({ error: "Please enter a valid email." }).trim(),
-  password: z
-    .string()
-    .min(8, { error: "Be at least 8 characters long" })
-    .regex(/[a-zA-Z]/, { error: "Contain at least one letter." })
-    .regex(/[0-9]/, { error: "Contain at least one number." })
-    .regex(/[^a-zA-Z0-9]/, {
-      error: "Contain at least one special character.",
-    })
-    .trim(),
-  confirmPassword: z
-    .string()
-    .min(8, { error: "Be at least 8 characters long" })
-    .regex(/[a-zA-Z]/, { error: "Contain at least one letter." })
-    .regex(/[0-9]/, { error: "Contain at least one number." })
-    .regex(/[^a-zA-Z0-9]/, {
-      error: "Contain at least one special character.",
-    })
-    .trim(),
-});
+    email: z
+      .email("Please enter a valid email.")
+      .trim()
+      .max(255)
+      .optional(),
 
-export const LoginShchema = z.object({
-    email: z.email({ error: "Please enter a valid email." }).trim(),
     password: z
       .string()
-      .min(8, { error: "Be at least 8 characters long" })
-      .regex(/[a-zA-Z]/, { error: "Contain at least one letter." })
-      .regex(/[0-9]/, { error: "Contain at least one number." })
-      .regex(/[^a-zA-Z0-9]/, {
-        error: "Contain at least one special character.",
-      })
-      .trim(),
+      .min(8, "Be at least 8 characters long")
+      .regex(/[a-zA-Z]/, "Contain at least one letter.")
+      .regex(/[0-9]/, "Contain at least one number.")
+      .regex(/[^a-zA-Z0-9]/, "Contain at least one special character.")
+      .optional(),
+
+    confirmPassword: z.string().optional(),
+
+    role: z.enum(["user", "admin"]).optional(),
+
+    _delete: z.boolean().optional(),
   });
 
-// export type FormState =
-//   | {
-//       errors?: {
-//         name?: string[]
-//         email?: string[]
-//         password?: string[]
-//         confirmPassword?: string[]
-//       }
-//       message?: string
-//     }
-//   | undefined
+  // CREATE (giống fork required)
+  create = this.base
+    .extend({
+      name: this.base.shape.name.unwrap(),
+      email: this.base.shape.email.unwrap(),
+      password: this.base.shape.password.unwrap(),
+      confirmPassword: z.string(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: "Passwords do not match",
+      path: ["confirmPassword"],
+    });
+
+  // UPDATE (giữ optional như base)
+  update = this.base;
+
+  // LOGIN
+  login = z.object({
+    email: z.email("Please enter a valid email.").trim(),
+    password: z.string().min(8, "Password is required"),
+  });
+}
+
+const usersValidation = new UsersValidation();
+
+export default usersValidation;

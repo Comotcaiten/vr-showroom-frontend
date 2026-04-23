@@ -27,8 +27,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
-import { SignUpSchema } from "@/validations/user_validations";
+import usersValidation from "@/validations/user_validations";
 import { useAuth } from "@/context/auth-context";
+
+const SignUpSchema = usersValidation.create;
 
 export function SignupForm() {
 
