@@ -1,16 +1,13 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-
-type User = {
-  id: string;
-  name: string;
-  role: string;
-};
+import { User } from "@/types/user";
+import { authService } from "@/services/auth-service";
 
 type AuthContextType = {
   user: User | null;
   isLoading: boolean;
+  isAuthenticated: boolean;
   refreshUser: () => Promise<void>;
   logout: () => Promise<void>;
 };
@@ -21,22 +18,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 🔥 fetch /me
+  // 🔥 fetch /me dùng service
   const fetchUser = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/users/me", {
-        credentials: "include",
-        cache: "no-store",
-      });
-
-      if (!res.ok) {
-        setUser(null);
-        return;
-      }
-
-      const data = await res.json();
-      setUser(data.data);
+      const res = await authService.me();
+      setUser(res.data);
     } catch (error) {
+      // ❗ nếu 401 thì coi như chưa login
       setUser(null);
     }
   };
@@ -50,29 +38,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loadUser();
   }, []);
 
-  // expose
+  // refresh user (sau login)
   const refreshUser = async () => {
     setIsLoading(true);
     await fetchUser();
     setIsLoading(false);
   };
 
+  // logout
   const logout = async () => {
-    await fetch("http://localhost:5000/api/users/logout", {
-      method: "POST",
-      credentials: "include",
-    });
+    try {
+      await authService.logout();
+    } catch {}
 
     setUser(null);
-    
-    await refreshUser();
   };
 
-  return (
-    <AuthContext.Provider value={{ user, isLoading, refreshUser, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const value: AuthContextType = {
+    user,
+    isLoading,
+    isAuthenticated: !!user, // 🔥 thêm cái này rất quan trọng
+    refreshUser,
+    logout,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 // hook dùng cho tiện

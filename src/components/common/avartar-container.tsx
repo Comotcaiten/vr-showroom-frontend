@@ -42,7 +42,6 @@ export default function AvartarContainer() {
                 <DropdownMenuItem variant="destructive"
                     onClick={logout}
                 >
-                    {/* Demo logout */}
                     <LogOutIcon className="mr-2 h-4 w-4" />
                     Log out
                 </DropdownMenuItem>

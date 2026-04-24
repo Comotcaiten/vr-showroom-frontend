@@ -74,7 +74,7 @@ const MobileMenu = ({ items, mobileOpen, setMobileOpen }: { items: NavItem[], mo
                 </Button>
             </SheetTrigger>
             {/* Content */}
-            <SheetContent side="right" className="py-4 w-72 pt-12">
+            <SheetContent side="left" className="py-4 w-72 pt-12">
                 <SheetTitle className="px-4 font-bold text-xl">HotFur</SheetTitle>
                 <SheetDescription></SheetDescription>
                 <nav className="flex flex-col gap-1 px-">
@@ -119,7 +119,13 @@ export default function Header() {
         <header className="sticky top-0 z-50 border-b w-full border-border/60 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
             <div className="wrapper px-12">
                 <div className="flex h-16 items-center justify-between">
+                    <div className="flex">
+                    {/* Mobile Menu */}
+                    <MobileMenu 
+                    items={NAV_ITEMS} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+
                     <Logo/>
+                    </div>
 
                     {/* Desktop Nav */}
                     <DesktopNav items={NAV_ITEMS} />
@@ -127,9 +133,7 @@ export default function Header() {
                     {/* Auth Buttons */}
                     <AuthContainer/>
 
-                    {/* Mobile Menu */}
-                    <MobileMenu 
-                    items={NAV_ITEMS} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+
                 </div>
             </div>
         </header>

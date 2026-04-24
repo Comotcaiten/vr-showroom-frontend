@@ -30,6 +30,8 @@ import * as z from "zod";
 import usersValidation from "@/validations/user_validations";
 import { useAuth } from "@/context/auth-context";
 
+import { authService } from "@/services/auth-service";
+
 const SignUpSchema = usersValidation.create;
 
 export function SignupForm() {
@@ -50,31 +52,14 @@ export function SignupForm() {
 
   async function onSubmit(data: z.infer<typeof SignUpSchema>) {
     try {
-      console.log(`${process.env.NEXT_PUBLIC_API_URL}/users/login`)
-      const res = await fetch(
-        `http://localhost:5000/api/users/register`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data), // dùng data từ form
-          credentials: "include",     // để nhận cookie
-        }
-      );
-
-      const result = await res.json();
-
-      if (!res.ok) {
-        toast.error(result.message || "Register failed");
-        return;
-      }
+      const res = await authService.register(data);
 
       await refreshUser();
 
-      toast.success("Register successful");
-
+      toast.success(res.message);
       router.push("/");
     } catch (err) {
-      toast.error("Something went wrong");
+      toast.error("Register failed");
     }
   }
 

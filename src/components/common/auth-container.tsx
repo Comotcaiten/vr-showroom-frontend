@@ -6,15 +6,21 @@ import AvartarContainer from "./avartar-container";
 import { useAuth } from "@/context/auth-context";
 
 function AuthContainer() {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, isAuthenticated } = useAuth();
 
-  if (isLoading) return <div className="hidden md:flex items-center gap-2 shrink-0"> loading</div>;
+  if (isLoading) {
+    return (
+      <div className="hidden md:flex items-center gap-2 shrink-0">
+        loading
+      </div>
+    );
+  }
 
   return (
-    <div className="hidden md:flex items-center gap-2 shrink-0">
-      {user ? (
+    <div className="md:flex items-center gap-2 shrink-0">
+      {isAuthenticated ? (
         <>
-          <span>Xin chào {user.name}</span>
+          <span className="hidden md:flex">Xin chào {user?.name}</span>
           <AvartarContainer />
         </>
       ) : (

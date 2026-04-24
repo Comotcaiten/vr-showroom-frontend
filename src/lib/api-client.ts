@@ -1,12 +1,11 @@
-
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = "http://localhost:5000/api";
 
 export async function apiClient<T>(
   endpoint: string,
-  options?: RequestInit,
+  options?: RequestInit
 ): Promise<T> {
-  console.log(`${BASE_URL}${endpoint}`)
   const res = await fetch(`${BASE_URL}${endpoint}`, {
+    credentials: "include", // 🔥 thêm dòng này
     ...options,
     headers: {
       "Content-Type": "application/json",
@@ -15,8 +14,14 @@ export async function apiClient<T>(
   });
 
   if (!res.ok) {
-    const errorBody = await res.text();
-    throw new Error(`API Error ${res.status}: ${errorBody}`);
+    let message = "API Error";
+
+    try {
+      const error = await res.json();
+      message = error.message;
+    } catch {}
+
+    throw new Error(message);
   }
 
   return res.json();

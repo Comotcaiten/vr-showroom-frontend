@@ -29,49 +29,34 @@ import * as z from "zod";
 import usersValidation from "@/validations/user_validations";
 import { useAuth } from "@/context/auth-context";
 
-const LoginShchema = usersValidation.login;
+import { authService } from "@/services/auth-service";
+
+const LoginSchema = usersValidation.login;
 
 export function LoginForm() {
 
   const router = useRouter();
 
   const { refreshUser } = useAuth();
-  
-  const form = useForm<z.infer<typeof LoginShchema>>({
-    resolver: zodResolver(LoginShchema),
+
+  const form = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  async function onSubmit(data: z.infer<typeof LoginShchema>) {
+  async function onSubmit(data: z.infer<typeof LoginSchema>) {
     try {
-      console.log(`${process.env.NEXT_PUBLIC_API_URL}/users/login`)
-      const res = await fetch(
-        `http://localhost:5000/api/users/login`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data), // dùng data từ form
-          credentials: "include",     // để nhận cookie
-        }
-      );
-
-      const result = await res.json();
-
-      if (!res.ok) {
-        toast.error(result.message || "Login failed");
-        return;
-      }
+      const res = await authService.login(data);
 
       await refreshUser();
 
-      toast.success("Login successful");
-
+      toast.success(res.message);
       router.push("/");
     } catch (err) {
-      toast.error("Something went wrong");
+      toast.error("Login failed");
     }
   }
 
