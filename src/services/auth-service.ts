@@ -5,6 +5,7 @@ import { User } from "@/types/user";
 
 export const authService = {
   login: async (data: { email: string; password: string }) => {
+    console.log(`Login frontend`);
     return await apiClient<ApiResponse<User>>("/users/login", {
       method: "POST",
       body: JSON.stringify(data),
@@ -13,6 +14,7 @@ export const authService = {
   },
 
   register: async (data: { email: string; password: string }) => {
+    console.log(`Register frontend`);
     return await apiClient<ApiResponse<User>>("/users/register", {
       method: "POST",
       body: JSON.stringify(data),

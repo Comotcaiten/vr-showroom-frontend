@@ -4,11 +4,7 @@ import { useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-} from "@/components/ui/field";
+import { Field, FieldDescription, FieldGroup } from "@/components/ui/field";
 
 import {
   Card,
@@ -34,7 +30,6 @@ import { authService } from "@/services/auth-service";
 const LoginSchema = usersValidation.login;
 
 export function LoginForm() {
-
   const router = useRouter();
 
   const { refreshUser } = useAuth();
@@ -71,7 +66,11 @@ export function LoginForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form id="form-login" className={cn("flex flex-col gap-6")} onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          id="form-login"
+          className={cn("flex flex-col gap-6")}
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
           <FieldGroup>
             <FormFieldController
               control={form.control}
@@ -90,7 +89,6 @@ export function LoginForm() {
               type="password"
             />
           </FieldGroup>
-
         </form>
       </CardContent>
 
@@ -99,7 +97,11 @@ export function LoginForm() {
           <Button type="submit" form="form-login">
             Submit
           </Button>
-          <Button type="button" variant="destructive" onClick={() => form.reset()}>
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={() => form.reset()}
+          >
             Reset
           </Button>
           <FieldDescription className="text-center">
@@ -111,5 +113,5 @@ export function LoginForm() {
         </Field>
       </CardFooter>
     </Card>
-  )
+  );
 }

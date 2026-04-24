@@ -2,7 +2,7 @@ const BASE_URL = "http://localhost:5000/api";
 
 export async function apiClient<T>(
   endpoint: string,
-  options?: RequestInit
+  options?: RequestInit,
 ): Promise<T> {
   const res = await fetch(`${BASE_URL}${endpoint}`, {
     credentials: "include", // 🔥 thêm dòng này
