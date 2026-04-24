@@ -40,13 +40,13 @@ export default function RootLayout({
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
+          themes={["light", "dark"]}
           enableSystem
           disableTransitionOnChange
         >
-         <AuthProvider>{children}</AuthProvider>
-
+          <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
-          <Toaster />
+        <Toaster />
       </body>
     </html>
   );

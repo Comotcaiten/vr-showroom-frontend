@@ -16,7 +16,7 @@ function AuthContainer() {
   }
 
   return (
-    <div className="md:flex items-center gap-2 shrink-0">
+    <div className="flex items-center gap-2 shrink-0">
       <ThemeToggle />
       {isAuthenticated ? (
         <>
