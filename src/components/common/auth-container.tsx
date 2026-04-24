@@ -4,20 +4,20 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import AvartarContainer from "./avartar-container";
 import { useAuth } from "@/context/auth-context";
+import ThemeToggle from "./theme-toggle";
 
 function AuthContainer() {
   const { user, isLoading, isAuthenticated } = useAuth();
 
   if (isLoading) {
     return (
-      <div className="hidden md:flex items-center gap-2 shrink-0">
-        loading
-      </div>
+      <div className="hidden md:flex items-center gap-2 shrink-0">loading</div>
     );
   }
 
   return (
     <div className="md:flex items-center gap-2 shrink-0">
+      <ThemeToggle />
       {isAuthenticated ? (
         <>
           <span className="hidden md:flex">Xin chào {user?.name}</span>

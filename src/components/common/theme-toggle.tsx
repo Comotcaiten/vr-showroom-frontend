@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+"use client";
 
 import { Moon, Sun } from "lucide-react";
 
