@@ -5,11 +5,7 @@ import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-} from "@/components/ui/field";
+import { Field, FieldDescription, FieldGroup } from "@/components/ui/field";
 
 import {
   Card,
@@ -32,13 +28,14 @@ import { useAuth } from "@/context/auth-context";
 
 import { authService } from "@/services/auth-service";
 
+import { useEffect } from "react";
+
 const SignUpSchema = usersValidation.create;
 
 export function SignupForm() {
-
   const router = useRouter();
-  
-  const { refreshUser } = useAuth();
+
+  const { user, refreshUser } = useAuth();
 
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
@@ -46,7 +43,7 @@ export function SignupForm() {
       name: "",
       email: "",
       password: "",
-      confirmPassword: ""
+      confirmPassword: "",
     },
   });
 
@@ -63,6 +60,12 @@ export function SignupForm() {
     }
   }
 
+  useEffect(() => {
+    if (user != null) {
+      router.push("/");
+    }
+  });
+
   return (
     <Card className="w-full sm:max-w-md">
       <CardHeader>
@@ -74,7 +77,11 @@ export function SignupForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form id="form-signup" className={cn("flex flex-col gap-6")} onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          id="form-signup"
+          className={cn("flex flex-col gap-6")}
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
           <FieldGroup>
             <FormFieldController
               control={form.control}
@@ -109,7 +116,6 @@ export function SignupForm() {
               type="password"
             />
           </FieldGroup>
-
         </form>
       </CardContent>
 
@@ -118,7 +124,11 @@ export function SignupForm() {
           <Button type="submit" form="form-signup">
             Submit
           </Button>
-          <Button type="button" variant="destructive" onClick={() => form.reset()}>
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={() => form.reset()}
+          >
             Reset
           </Button>
           <FieldDescription className="text-center">
@@ -127,5 +137,5 @@ export function SignupForm() {
         </Field>
       </CardFooter>
     </Card>
-  )
+  );
 }

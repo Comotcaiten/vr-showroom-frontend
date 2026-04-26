@@ -9,12 +9,27 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/context/auth-context";
-import { LogOutIcon, SettingsIcon, UserIcon } from "lucide-react";
+import {
+  LogOutIcon,
+  MonitorCheckIcon,
+  SettingsIcon,
+  UserIcon,
+} from "lucide-react";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
 // { setIsSignedIn }: { setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>> }
 export default function AvartarContainer() {
-  const { logout } = useAuth();
+  const router = useRouter();
+
+  const { logout, user, isLoading, isAuthenticated } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="hidden md:flex items-center gap-2 shrink-0">loading</div>
+    );
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -41,6 +56,20 @@ export default function AvartarContainer() {
             <SettingsIcon className="mr-2 h-4 w-4" />
             Settings
           </DropdownMenuItem>
+          {isAuthenticated && user?.role == "admin" ? (
+            <>
+              <DropdownMenuItem
+                onClick={() => {
+                  router.push("/dashboard");
+                }}
+              >
+                <MonitorCheckIcon className="mr-2 h-4 w-4" />
+                Dashboard
+              </DropdownMenuItem>
+            </>
+          ) : (
+            <></>
+          )}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" onClick={logout}>

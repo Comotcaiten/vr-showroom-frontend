@@ -27,12 +27,14 @@ import { useAuth } from "@/context/auth-context";
 
 import { authService } from "@/services/auth-service";
 
+import { useEffect } from "react";
+
 const LoginSchema = usersValidation.login;
 
 export function LoginForm() {
   const router = useRouter();
 
-  const { refreshUser } = useAuth();
+  const { user, refreshUser } = useAuth();
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -55,11 +57,17 @@ export function LoginForm() {
     }
   }
 
+  useEffect(() => {
+    if (user != null) {
+      router.push("/");
+    }
+  });
+
   return (
     <Card className="w-full sm:max-w-md">
       <CardHeader>
         <CardTitle className="flex items-center justify-center">
-          <h1 className="text-2xl font-bold">Create your account</h1>
+          <h1 className="text-2xl font-bold">Login your account</h1>
         </CardTitle>
         <CardDescription className="flex items-center justify-center">
           Fill in the form below to create your account
