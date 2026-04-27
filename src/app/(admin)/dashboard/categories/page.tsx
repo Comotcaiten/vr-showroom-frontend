@@ -1,40 +1,50 @@
-'use client'
+"use client";
+
 import { GenericTable } from "@/components/common/generic-table";
+import { useEffect, useState } from "react";
+
 import { CategoryColumns } from "@/components/dashboard/columns/category-columns";
 import { categoryService } from "@/services/category-services";
 import { Category } from "@/types/category";
-import { useEffect, useState } from "react";
+
+const columns = CategoryColumns;
+const title = "Brands";
+const service = categoryService;
 
 export default function Page() {
-    const [data, setData] = useState<Category[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchBrands = async () => {
-            try {
-                const res = await categoryService.getAll();
-                setData(res.data);
-                setIsLoading(false);
-            } catch (error) {
-                console.error(error);
-            }
-        };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await service.getAll();
+        setData(res.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-        fetchBrands();
-    }, []);
+    fetchData();
+  }, []);
 
-    return (
-        <main className="min-h-screen flex-row items-center">
-            <section className="flex items-center">Section 1</section>
-            {isLoading ? <>
-                <h1>...Loaidng</h1>
-            </> : <GenericTable
-                columns={CategoryColumns}
-                title="Category"
-                data={data}
-                filter_column="name"
-                has_visibility={true}
-            />}
-        </main>
-    );
+  return (
+    <main className="min-h-screen flex-row items-center">
+      <section className="flex items-center">Section 1</section>
+      {isLoading ? (
+        <>
+          <h1>...Loaidng</h1>
+        </>
+      ) : (
+        <GenericTable
+          columns={columns}
+          title={title}
+          data={data}
+          filter_column="name"
+          has_visibility={true}
+        />
+      )}
+    </main>
+  );
 }
