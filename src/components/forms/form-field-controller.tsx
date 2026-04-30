@@ -1,12 +1,7 @@
 "use client";
 
 import { Controller, Control, FieldValues, Path } from "react-hook-form";
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldLabel,
-} from "../ui/field";
+import { Field, FieldDescription, FieldError, FieldLabel } from "../ui/field";
 import {
   InputGroup,
   InputGroupInput,
@@ -87,13 +82,9 @@ export function FormFieldController<T extends FieldValues>({
               )}
             </InputGroup>
 
-            {helperText && (
-              <FieldDescription>{helperText}</FieldDescription>
-            )}
+            {helperText && <FieldDescription>{helperText}</FieldDescription>}
 
-            {fieldState.error && (
-              <FieldError errors={[fieldState.error]} />
-            )}
+            {fieldState.error && <FieldError errors={[fieldState.error]} />}
           </Field>
         );
       }}

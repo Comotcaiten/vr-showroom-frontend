@@ -1,47 +1,99 @@
 "use client";
+// app/src/(admin)/dashboard/brands/page.tsx
 import { GenericTable } from "@/components/common/generic-table";
-import { useEffect, useState } from "react";
-
-import { BrandColumns } from "@/components/dashboard/columns/brand-columns";
-import { brandService } from "@/services/brand-services";
+import { DialogForm } from "@/components/common/dialog-form-v2";
+import { createBrandColumns } from "@/components/dashboard/columns/brand-columns";
+import brandValidation from "@/validations/brand_validations";
+import { useBrand } from "@/context/brand-context";
 import { Brand } from "@/types/brand";
+import { useState } from "react";
 
-const columns = BrandColumns;
 const title = "Brands";
-const service = brandService;
+const schema = brandValidation.base;
 
 export default function Page() {
-  const [data, setData] = useState<Brand[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { isLoading, data, create, update, remove } = useBrand();
+  const [editingBrand, setEditingBrand] = useState<Brand | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await service.getAll();
-        setData(res.data);
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const columns = createBrandColumns({
+    onEdit: (brand) => setEditingBrand(brand),
+    onDelete: async (brand) => {
+      await remove(brand._id);
+    },
+  });
 
   return (
     <main className="min-h-screen flex-row items-center">
-      <section className="flex items-center">Section 1</section>
+      <section className="flex items-center">{title}</section>
+
+      {/* Edit Dialog */}
+      {editingBrand && (
+        <DialogForm
+          schema={schema}
+          title="Edit Brand"
+          triggerLabel="Edit Brand"
+          defaultValues={{
+            name: editingBrand.name,
+            description: editingBrand.description ?? "",
+          }}
+          fields={[
+            { name: "name", label: "Brand Name", placeholder: "e.g. Nike" },
+            { name: "description", label: "Description", textarea: true },
+          ]}
+          onSubmit={async (data) => {
+            try {
+              await update(editingBrand._id, {
+                name: data.name || "",
+                description: data.description,
+              });
+              setEditingBrand(null);
+              return { success: true };
+            } catch (err) {
+              return {
+                success: false,
+                error: err instanceof Error ? err.message : "An error occurred",
+              };
+            }
+          }}
+        />
+      )}
+
       {isLoading ? (
-        <>
-          <h1>...Loaidng</h1>
-        </>
+        <h1>...Loading</h1>
       ) : (
         <GenericTable
           columns={columns}
-          title={title}
           data={data}
           filter_column="name"
           has_visibility={true}
+          dialogForm={
+            <DialogForm
+              schema={schema}
+              title="Create Brand"
+              triggerLabel="Add Brand"
+              defaultValues={{ name: "", description: "" }}
+              fields={[
+                { name: "name", label: "Brand Name", placeholder: "e.g. Nike" },
+                { name: "description", label: "Description", textarea: true },
+              ]}
+              onSubmit={async (data) => {
+                try {
+                  await create({
+                    name: data.name || "",
+                    description: data.description,
+                    logoUrl: data.logoUrl,
+                  });
+                  return { success: true };
+                } catch (err) {
+                  return {
+                    success: false,
+                    error:
+                      err instanceof Error ? err.message : "An error occurred",
+                  };
+                }
+              }}
+            />
+          }
         />
       )}
     </main>
