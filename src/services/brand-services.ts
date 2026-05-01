@@ -26,7 +26,7 @@ export const brandService = {
   },
 
   remove: async (id: string): Promise<ApiResponse<Brand>> => {
-    return await apiClient<ApiResponse<Brand>>(`/brands/${id}`, {
+    return await apiClient<ApiResponse<Brand>>(`/brands/destroy/${id}`, {
       method: "DELETE",
     });
   },

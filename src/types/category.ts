@@ -1,3 +1,5 @@
+import z from "zod";
+
 // src/types/category.ts
 export interface Category {
   _id: string;
@@ -8,3 +10,5 @@ export interface Category {
   createdAt: string;
   updatedAt: string;
 }
+
+// export type CreateCategoryDto = z.infer<typeof category.create>;

@@ -51,7 +51,8 @@ export function FormFieldController<T extends FieldValues>({
             <InputGroup>
               {textarea ? (
                 <InputGroupTextarea
-                  {...field}
+                  // {...field}
+                  value={field.value}
                   name={field.name}
                   id={id}
                   placeholder={placeholder}
@@ -59,10 +60,12 @@ export function FormFieldController<T extends FieldValues>({
                   rows={6}
                   className="min-h-24 resize-none"
                   aria-invalid={fieldState.invalid}
+                  onChange={field.onChange}
                 />
               ) : (
                 <InputGroupInput
-                  {...field}
+                  // {...field}
+                  value={field.value}
                   name={field.name}
                   id={id}
                   placeholder={placeholder}
@@ -70,6 +73,7 @@ export function FormFieldController<T extends FieldValues>({
                   aria-invalid={fieldState.invalid}
                   autoComplete="off"
                   type={type}
+                  onChange={field.onChange}
                 />
               )}
 

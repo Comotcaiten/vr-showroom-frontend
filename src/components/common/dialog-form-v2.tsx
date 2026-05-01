@@ -22,7 +22,12 @@ type FieldConfig<T extends FieldValues> = {
   name: Path<T>;
   label: string;
   placeholder?: string;
+  required?: boolean;
+  type?: string;
+  helperText?: string;
   textarea?: boolean;
+  showCount?: boolean;
+  maxLength?: number;
 };
 
 type DialogFormProps<TSchema extends z.ZodTypeAny> = {
@@ -51,7 +56,6 @@ export function DialogForm<TSchema extends z.ZodTypeAny>({
   open,
   onOpenChange,
 }: DialogFormProps<TSchema>) {
-
   type FormData = z.infer<TSchema> & FieldValues;
 
   const isEdit = !!initialData;
@@ -98,7 +102,9 @@ export function DialogForm<TSchema extends z.ZodTypeAny>({
       </Button>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle>{title ?? (isEdit ? "Edit Item" : "Create Item")}</DialogTitle>
+          <DialogTitle>
+            {title ?? (isEdit ? "Edit Item" : "Create Item")}
+          </DialogTitle>
         </DialogHeader>
         <DialogDescription> </DialogDescription>
         <form onSubmit={form.handleSubmit(handleSubmit)} id="dialog-form">
@@ -112,6 +118,9 @@ export function DialogForm<TSchema extends z.ZodTypeAny>({
                 label={field.label}
                 placeholder={field.placeholder}
                 textarea={field.textarea}
+                showCount={field.showCount}
+                maxLength={field.maxLength}
+                helperText={field.helperText}
               />
             ))}
           </FieldGroup>

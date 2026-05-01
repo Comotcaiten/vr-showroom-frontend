@@ -52,8 +52,18 @@ export default function Page() {
               }}
               schema={schema}
               fields={[
-                { name: "name", label: "Brand Name" },
-                { name: "description", label: "Description" },
+                {
+                  name: "name",
+                  label: "Brand Name",
+                  helperText: "Brand name like: Nike",
+                },
+                {
+                  name: "description",
+                  label: "Description",
+                  textarea: true,
+                  showCount: true,
+                  maxLength: 500,
+                },
               ]}
               initialData={editingBrand}
               title={editingBrand ? "Edit Brand" : "Create Brand"}
