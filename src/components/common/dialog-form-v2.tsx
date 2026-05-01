@@ -5,6 +5,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -37,6 +38,10 @@ type DialogFormProps<TSchema extends z.ZodTypeAny> = {
   onSubmit: (data: z.infer<TSchema>) => Promise<ApiResponseDialog>;
   title?: string;
   triggerLabel?: string;
+  trigger?: boolean;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?(open: boolean): void;
 };
 
 export function DialogForm<TSchema extends z.ZodTypeAny>({
@@ -46,6 +51,10 @@ export function DialogForm<TSchema extends z.ZodTypeAny>({
   onSubmit,
   title = "Create",
   triggerLabel = "Add New",
+  trigger = true,
+  open,
+  defaultOpen,
+  onOpenChange,
 }: DialogFormProps<TSchema>) {
   type FormData = z.infer<TSchema> & FieldValues;
 
@@ -68,17 +77,20 @@ export function DialogForm<TSchema extends z.ZodTypeAny>({
   }
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline" className="ml-2">
-          <PlusIcon />
-          {triggerLabel}
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange} defaultOpen={defaultOpen}>
+      {trigger && (
+        <DialogTrigger asChild>
+          <Button variant="outline" className="ml-2">
+            <PlusIcon />
+            {triggerLabel}
+          </Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
+        <DialogDescription> </DialogDescription>
         <form onSubmit={form.handleSubmit(handleSubmit)} id="dialog-form">
           <FieldGroup>
             {fields.map((field) => (

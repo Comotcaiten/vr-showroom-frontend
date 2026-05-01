@@ -20,7 +20,7 @@ export const brandService = {
     data: CreateBrandDto,
   ): Promise<ApiResponse<Brand>> => {
     return await apiClient<ApiResponse<Brand>>(`/brands/${id}`, {
-      method: "PATCH",
+      method: "PUT",
       body: JSON.stringify(data),
     });
   },

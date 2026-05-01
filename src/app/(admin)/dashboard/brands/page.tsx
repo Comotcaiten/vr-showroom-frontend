@@ -2,11 +2,13 @@
 // app/src/(admin)/dashboard/brands/page.tsx
 import { GenericTable } from "@/components/common/generic-table";
 import { DialogForm } from "@/components/common/dialog-form-v2";
+
 import { createBrandColumns } from "@/components/dashboard/columns/brand-columns";
 import brandValidation from "@/validations/brand_validations";
 import { useBrand } from "@/context/brand-context";
 import { Brand } from "@/types/brand";
-import { useState } from "react";
+
+import { useState, useMemo } from "react";
 
 const title = "Brands";
 const schema = brandValidation.base;
@@ -22,6 +24,15 @@ export default function Page() {
     },
   });
 
+  const defaultValues = useMemo(() => {
+    if (!editingBrand) return { name: "", description: "" };
+
+    return {
+      name: editingBrand.name,
+      description: editingBrand.description ?? "",
+    };
+  }, [editingBrand]);
+
   return (
     <main className="min-h-screen flex-row items-center">
       <section className="flex items-center">{title}</section>
@@ -29,31 +40,29 @@ export default function Page() {
       {/* Edit Dialog */}
       {editingBrand && (
         <DialogForm
+          open={!!editingBrand}
+          onOpenChange={(open) => {
+            if (!open) setEditingBrand(null);
+          }}
           schema={schema}
           title="Edit Brand"
-          triggerLabel="Edit Brand"
+          trigger={false}
           defaultValues={{
             name: editingBrand.name,
             description: editingBrand.description ?? "",
           }}
           fields={[
-            { name: "name", label: "Brand Name", placeholder: "e.g. Nike" },
+            { name: "name", label: "Brand Name" },
             { name: "description", label: "Description", textarea: true },
           ]}
           onSubmit={async (data) => {
-            try {
-              await update(editingBrand._id, {
-                name: data.name || "",
-                description: data.description,
-              });
-              setEditingBrand(null);
-              return { success: true };
-            } catch (err) {
-              return {
-                success: false,
-                error: err instanceof Error ? err.message : "An error occurred",
-              };
-            }
+            await update(editingBrand._id, {
+              name: data.name || "",
+              description: data.description,
+            });
+
+            setEditingBrand(null);
+            return { success: true };
           }}
         />
       )}
