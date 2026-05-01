@@ -2,14 +2,15 @@
 import { createContext, useEffect, useContext, useState } from "react";
 import { Brand, CreateBrandDto } from "@/types/brand";
 import { brandService } from "@/services/brand-services";
+import { ApiResponse } from "@/types/api-response";
 
 type BrandsContextType = {
   data: Brand[];
   isLoading: boolean;
   refreshBrands: () => Promise<void>;
-  create: (data: CreateBrandDto) => Promise<void>;
-  update: (id: string, data: CreateBrandDto) => Promise<void>;
-  remove: (id: string) => Promise<void>;
+  create: (data: CreateBrandDto) => Promise<ApiResponse<Brand>>;
+  update: (id: string, data: CreateBrandDto) => Promise<ApiResponse<Brand>>;
+  remove: (id: string) => Promise<ApiResponse<Brand>>;
 };
 
 const BrandsContext = createContext<BrandsContextType | null>(null);
@@ -41,18 +42,21 @@ export function BrandsProvider({ children }: { children: React.ReactNode }) {
   };
 
   const create = async (payload: CreateBrandDto) => {
-    await brandService.create(payload);
+    const res = await brandService.create(payload);
     await refreshBrands();
+    return res;
   };
 
   const update = async (id: string, payload: CreateBrandDto) => {
-    await brandService.update(id, payload);
+    const res = await brandService.update(id, payload);
     await refreshBrands();
+    return res
   };
 
   const remove = async (id: string) => {
-    await brandService.remove(id);
+    const res = await brandService.remove(id);
     await refreshBrands();
+    return res;
   };
 
   return (

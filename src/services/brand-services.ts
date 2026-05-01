@@ -25,8 +25,8 @@ export const brandService = {
     });
   },
 
-  remove: async (id: string): Promise<ApiResponse<void>> => {
-    return await apiClient<ApiResponse<void>>(`/brands/${id}`, {
+  remove: async (id: string): Promise<ApiResponse<Brand>> => {
+    return await apiClient<ApiResponse<Brand>>(`/brands/${id}`, {
       method: "DELETE",
     });
   },

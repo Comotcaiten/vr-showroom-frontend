@@ -9,15 +9,14 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { FieldGroup } from "@/components/ui/field";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusIcon } from "lucide-react";
 import { DefaultValues, FieldValues, Path, useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
 import { FormFieldController } from "../forms/form-field-controller";
+import { useEffect } from "react";
 
 type FieldConfig<T extends FieldValues> = {
   name: Path<T>;
@@ -26,69 +25,80 @@ type FieldConfig<T extends FieldValues> = {
   textarea?: boolean;
 };
 
-type ApiResponseDialog = {
-  message?: string;
-  [key: string]: unknown;
-};
-
 type DialogFormProps<TSchema extends z.ZodTypeAny> = {
   schema: TSchema;
-  defaultValues: DefaultValues<z.infer<TSchema> & FieldValues>;
   fields: FieldConfig<z.infer<TSchema> & FieldValues>[];
-  onSubmit: (data: z.infer<TSchema>) => Promise<ApiResponseDialog>;
   title?: string;
   triggerLabel?: string;
-  trigger?: boolean;
+
   open?: boolean;
-  defaultOpen?: boolean;
   onOpenChange?(open: boolean): void;
+
+  initialData?: Partial<z.infer<TSchema>> | null;
+
+  onCreate?: (data: z.infer<TSchema>) => Promise<void>;
+  onUpdate?: (data: z.infer<TSchema>) => Promise<void>;
 };
 
 export function DialogForm<TSchema extends z.ZodTypeAny>({
   schema,
-  defaultValues,
   fields,
-  onSubmit,
   title = "Create",
   triggerLabel = "Add New",
-  trigger = true,
+  initialData,
+  onCreate,
+  onUpdate,
   open,
-  defaultOpen,
   onOpenChange,
 }: DialogFormProps<TSchema>) {
+
   type FormData = z.infer<TSchema> & FieldValues;
+
+  const isEdit = !!initialData;
 
   const form = useForm<FormData>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(schema as any),
-    defaultValues,
+    defaultValues: (initialData ?? {}) as DefaultValues<FormData>,
   });
 
+  // reset khi đổi edit item
+  useEffect(() => {
+    if (open) {
+      form.reset((initialData ?? {}) as DefaultValues<FormData>);
+    }
+  }, [form, open, initialData]);
+
   async function handleSubmit(data: FormData) {
-    try {
-      const res = await onSubmit(data);
-      toast.success(res?.message ?? "Success");
-      form.reset();
-    } catch (err: unknown) {
-      const message =
-        err instanceof Error ? err.message : "Something went wrong";
-      toast.error(message);
+    if (isEdit) {
+      await onUpdate?.(data);
+    } else {
+      await onCreate?.(data);
+      form.reset(); // clear sau create
     }
   }
 
+  const handleOpenChange = (o: boolean) => {
+    if (!o) {
+      form.reset({} as DefaultValues<FormData>); // 🔥 clear form
+    }
+
+    onOpenChange?.(o);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} defaultOpen={defaultOpen}>
-      {trigger && (
-        <DialogTrigger asChild>
-          <Button variant="outline" className="ml-2">
-            <PlusIcon />
-            {triggerLabel}
-          </Button>
-        </DialogTrigger>
-      )}
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <Button
+        variant="outline"
+        className="ml-2"
+        onClick={() => onOpenChange?.(true)}
+      >
+        <PlusIcon />
+        {triggerLabel}
+      </Button>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle>{title ?? (isEdit ? "Edit Item" : "Create Item")}</DialogTitle>
         </DialogHeader>
         <DialogDescription> </DialogDescription>
         <form onSubmit={form.handleSubmit(handleSubmit)} id="dialog-form">
@@ -111,7 +121,7 @@ export function DialogForm<TSchema extends z.ZodTypeAny>({
             <Button variant="outline">Cancel</Button>
           </DialogClose>
           <Button type="submit" form="dialog-form">
-            Save
+            {isEdit ? "Update" : "Create"}
           </Button>
         </DialogFooter>
       </DialogContent>

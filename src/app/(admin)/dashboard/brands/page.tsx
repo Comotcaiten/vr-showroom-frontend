@@ -8,64 +8,32 @@ import brandValidation from "@/validations/brand_validations";
 import { useBrand } from "@/context/brand-context";
 import { Brand } from "@/types/brand";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const title = "Brands";
-const schema = brandValidation.base;
+const schema = brandValidation.create;
 
 export default function Page() {
   const { isLoading, data, create, update, remove } = useBrand();
+  const [open, setOpen] = useState(false);
   const [editingBrand, setEditingBrand] = useState<Brand | null>(null);
 
   const columns = createBrandColumns({
-    onEdit: (brand) => setEditingBrand(brand),
+    onEdit: (brand) => {
+      setEditingBrand(brand);
+      setOpen(true);
+    },
     onDelete: async (brand) => {
-      await remove(brand._id);
+      const res = await remove(brand._id);
+
+      toast.success(res.message);
     },
   });
-
-  const defaultValues = useMemo(() => {
-    if (!editingBrand) return { name: "", description: "" };
-
-    return {
-      name: editingBrand.name,
-      description: editingBrand.description ?? "",
-    };
-  }, [editingBrand]);
 
   return (
     <main className="min-h-screen flex-row items-center">
       <section className="flex items-center">{title}</section>
-
-      {/* Edit Dialog */}
-      {editingBrand && (
-        <DialogForm
-          open={!!editingBrand}
-          onOpenChange={(open) => {
-            if (!open) setEditingBrand(null);
-          }}
-          schema={schema}
-          title="Edit Brand"
-          trigger={false}
-          defaultValues={{
-            name: editingBrand.name,
-            description: editingBrand.description ?? "",
-          }}
-          fields={[
-            { name: "name", label: "Brand Name" },
-            { name: "description", label: "Description", textarea: true },
-          ]}
-          onSubmit={async (data) => {
-            await update(editingBrand._id, {
-              name: data.name || "",
-              description: data.description,
-            });
-
-            setEditingBrand(null);
-            return { success: true };
-          }}
-        />
-      )}
 
       {isLoading ? (
         <h1>...Loading</h1>
@@ -77,29 +45,36 @@ export default function Page() {
           has_visibility={true}
           dialogForm={
             <DialogForm
+              open={open}
+              onOpenChange={(o) => {
+                setOpen(o);
+                if (!o) setEditingBrand(null);
+              }}
               schema={schema}
-              title="Create Brand"
-              triggerLabel="Add Brand"
-              defaultValues={{ name: "", description: "" }}
               fields={[
-                { name: "name", label: "Brand Name", placeholder: "e.g. Nike" },
-                { name: "description", label: "Description", textarea: true },
+                { name: "name", label: "Brand Name" },
+                { name: "description", label: "Description" },
               ]}
-              onSubmit={async (data) => {
-                try {
-                  await create({
-                    name: data.name || "",
-                    description: data.description,
-                    logoUrl: data.logoUrl,
-                  });
-                  return { success: true };
-                } catch (err) {
-                  return {
-                    success: false,
-                    error:
-                      err instanceof Error ? err.message : "An error occurred",
-                  };
-                }
+              initialData={editingBrand}
+              title={editingBrand ? "Edit Brand" : "Create Brand"}
+              onCreate={async (data) => {
+                const res = await create({
+                  name: String(data.name),
+                  description: data.description,
+                });
+
+                toast.success(res.message);
+              }}
+              onUpdate={async (data) => {
+                if (!editingBrand) return;
+
+                const res = await update(editingBrand._id, {
+                  name: String(data.name),
+                  description: data.description,
+                });
+                toast.success(res.message);
+                setOpen(false);
+                setEditingBrand(null);
               }}
             />
           }
