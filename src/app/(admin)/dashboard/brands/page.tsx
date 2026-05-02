@@ -17,15 +17,15 @@ const schema = brandValidation.create;
 export default function Page() {
   const { isLoading, data, create, update, remove } = useBrand();
   const [open, setOpen] = useState(false);
-  const [editingBrand, setEditingBrand] = useState<Brand | null>(null);
+  const [editingData, setEditingData] = useState<Brand | null>(null);
 
   const columns = createBrandColumns({
-    onEdit: (brand) => {
-      setEditingBrand(brand);
+    onEdit: (data) => {
+      setEditingData(data);
       setOpen(true);
     },
-    onDelete: async (brand) => {
-      const res = await remove(brand._id);
+    onDelete: async (data) => {
+      const res = await remove(data._id);
 
       toast.success(res.message);
     },
@@ -48,7 +48,11 @@ export default function Page() {
               open={open}
               onOpenChange={(o) => {
                 setOpen(o);
-                if (!o) setEditingBrand(null);
+                console.log(o);
+                if (!o) {
+                  console.log("Set Null")
+                  setEditingData(null)
+                };
               }}
               schema={schema}
               fields={[
@@ -65,8 +69,8 @@ export default function Page() {
                   maxLength: 500,
                 },
               ]}
-              initialData={editingBrand}
-              title={editingBrand ? "Edit Brand" : "Create Brand"}
+              initialData={editingData}
+              title={editingData ? "Edit Brand" : "Create Brand"}
               onCreate={async (data) => {
                 const res = await create({
                   name: String(data.name),
@@ -76,15 +80,15 @@ export default function Page() {
                 toast.success(res.message);
               }}
               onUpdate={async (data) => {
-                if (!editingBrand) return;
+                if (!editingData) return;
 
-                const res = await update(editingBrand._id, {
+                const res = await update(editingData._id, {
                   name: String(data.name),
                   description: data.description,
                 });
                 toast.success(res.message);
                 setOpen(false);
-                setEditingBrand(null);
+                setEditingData(null);
               }}
             />
           }
