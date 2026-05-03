@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { FieldGroup } from "@/components/ui/field";
 
-import { FormFieldController } from "../forms/form-field-controller";
+import { FieldSelectConfig, FormFieldController } from "../forms/form-field-controller";
 
 type FieldConfig<T extends FieldValues> = {
   name: Path<T>;
@@ -29,6 +29,9 @@ type FieldConfig<T extends FieldValues> = {
   textarea?: boolean;
   showCount?: boolean;
   maxLength?: number;
+
+  isSelect?: boolean;
+  selectContent?: FieldSelectConfig
 };
 
 type DialogFormProps<TSchema extends z.ZodTypeAny> = {
@@ -141,10 +144,12 @@ function DialogFormComponent<TSchema extends z.ZodTypeAny>({
           label={field.label}
           type={field.type}
           placeholder={field.placeholder}
-          textarea={field.textarea}
           showCount={field.showCount}
           maxLength={field.maxLength}
           helperText={field.helperText}
+
+          isSelect = {field.isSelect}
+          selectContent={field.selectContent}
         />
       )),
     [fields, form.control]

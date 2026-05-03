@@ -67,7 +67,7 @@ export default function Page() {
                 {
                   name: "description",
                   label: "Description",
-                  textarea: true,
+                  type: "textarea",
                   showCount: true,
                   maxLength: 500,
                 },
