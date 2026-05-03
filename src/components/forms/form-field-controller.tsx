@@ -52,7 +52,7 @@ export function FormFieldController<T extends FieldValues>({
               {textarea ? (
                 <InputGroupTextarea
                   // {...field}
-                  value={field.value}
+                  value={field.value ?? ""}
                   name={field.name}
                   id={id}
                   placeholder={placeholder}
@@ -65,7 +65,7 @@ export function FormFieldController<T extends FieldValues>({
               ) : (
                 <InputGroupInput
                   // {...field}
-                  value={field.value}
+                  value={field.value ?? ""}
                   name={field.name}
                   id={id}
                   placeholder={placeholder}

@@ -1,13 +1,14 @@
 "use client";
 import { createContext, useEffect, useContext, useState } from "react";
+import { ApiResponse } from "@/types/api-response";
+
 import { Brand, CreateBrandDto } from "@/types/brand";
 import { brandService } from "@/services/brand-services";
-import { ApiResponse } from "@/types/api-response";
 
 type BrandsContextType = {
   data: Brand[];
   isLoading: boolean;
-  refreshBrands: () => Promise<void>;
+  refreshData: () => Promise<void>;
   create: (data: CreateBrandDto) => Promise<ApiResponse<Brand>>;
   update: (id: string, data: CreateBrandDto) => Promise<ApiResponse<Brand>>;
   remove: (id: string) => Promise<ApiResponse<Brand>>;
@@ -19,7 +20,7 @@ export function BrandsProvider({ children }: { children: React.ReactNode }) {
   const [data, setData] = useState<Brand[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchBrands = async () => {
+  const fetchData = async () => {
     try {
       const res = await brandService.getAll();
       setData(res.data);
@@ -30,38 +31,38 @@ export function BrandsProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     (async () => {
-      await fetchBrands();
+      await fetchData();
       setIsLoading(false);
     })();
   }, []);
 
-  const refreshBrands = async () => {
+  const refreshData = async () => {
     setIsLoading(true);
-    await fetchBrands();
+    await fetchData();
     setIsLoading(false);
   };
 
   const create = async (payload: CreateBrandDto) => {
     const res = await brandService.create(payload);
-    await refreshBrands();
+    await refreshData();
     return res;
   };
 
   const update = async (id: string, payload: CreateBrandDto) => {
     const res = await brandService.update(id, payload);
-    await refreshBrands();
+    await refreshData();
     return res
   };
 
   const remove = async (id: string) => {
     const res = await brandService.remove(id);
-    await refreshBrands();
+    await refreshData();
     return res;
   };
 
   return (
     <BrandsContext.Provider
-      value={{ data, isLoading, refreshBrands, create, update, remove }}
+      value={{ data, isLoading, refreshData, create, update, remove }}
     >
       {children}
     </BrandsContext.Provider>

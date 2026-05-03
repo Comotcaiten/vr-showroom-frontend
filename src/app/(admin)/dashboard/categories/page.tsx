@@ -1,48 +1,102 @@
 "use client";
-
+// app/src/(admin)/dashboard/brands/page.tsx
 import { GenericTable } from "@/components/common/generic-table";
-import { useEffect, useState } from "react";
-
-import { CategoryColumns } from "@/components/dashboard/columns/category-columns";
-import { categoryService } from "@/services/category-services";
+import { DialogForm } from "@/components/common/dialog-form-v2";
+// {-------------------------------------- //
+import { createColumns } from "@/components/dashboard/columns/category-columns";
+import Validation from "@/validations/category_validations";
+import { useCategory } from "@/context/category-context";
 import { Category } from "@/types/category";
+// --------------------------------------} //
+import { useState } from "react";
+import { toast } from "sonner";
 
-const columns = CategoryColumns;
 const title = "Brands";
-const service = categoryService;
+const schema = Validation.create;
 
 export default function Page() {
-  const [data, setData] = useState<Category[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // {-------------------------------------- //
+  const { isLoading, data, create, update, remove } = useCategory();
+  const [open, setOpen] = useState(false);
+  const [editingData, setEditingData] = useState<Category | null>(null);
+  // --------------------------------------} //
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await service.getAll();
-        setData(res.data);
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const columns = createColumns({
+    onEdit: (data) => {
+      setEditingData(data);
+      setOpen(true);
+    },
+    onDelete: async (data) => {
+      const res = await remove(data._id);
 
-    fetchData();
-  }, []);
+      toast.success(res.message);
+    },
+  });
 
   return (
     <main className="min-h-screen flex-row items-center">
-      <section className="flex items-center">Section 1</section>
+      <section className="flex items-center">{title}</section>
+
       {isLoading ? (
-        <>
-          <h1>...Loaidng</h1>
-        </>
+        <h1>...Loading</h1>
       ) : (
         <GenericTable
           columns={columns}
-          title={title}
           data={data}
           filter_column="name"
           has_visibility={true}
+          dialogForm={
+            <DialogForm
+              open={open}
+              onOpenChange={(o) => {
+                setOpen(o);
+                console.log(o);
+                if (!o) {
+                  console.log("Set Null")
+                  setEditingData(null)
+                };
+              }}
+              schema={schema}
+              // {-------------------------------------- //
+              fields={[
+                {
+                  name: "name",
+                  label: "Category Name",
+                  helperText: "Category name like: Chair",
+                },
+                {
+                  name: "description",
+                  label: "Description",
+                  textarea: true,
+                  showCount: true,
+                  maxLength: 500,
+                },
+              ]}
+              // --------------------------------------} //
+              initialData={editingData}
+              // title={editingData ? "Edit Brand" : "Create Brand"}
+              onCreate={async (data) => {
+                const res = await create({
+                  name: String(data.name),
+                  description: data.description,
+                });
+                toast.success(res.message);
+                setOpen(false);
+                setEditingData(null);
+              }}
+              onUpdate={async (data) => {
+                if (!editingData) return;
+
+                const res = await update(editingData._id, {
+                  name: String(data.name),
+                  description: data.description,
+                });
+                toast.success(res.message);
+                setOpen(false);
+                setEditingData(null);
+              }}
+            />
+          }
         />
       )}
     </main>

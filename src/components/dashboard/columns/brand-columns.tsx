@@ -1,4 +1,5 @@
 import { Brand } from "@/types/brand";
+
 import { ColumnDef } from "@tanstack/react-table";
 import {
   ArrowUpDownIcon,
@@ -17,15 +18,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 
-type BrandColumnsOptions = {
+type ColumnsOptions = {
   onEdit?: (brand: Brand) => void;
   onDelete?: (brand: Brand) => void;
 };
 
-export function createBrandColumns({
+export function createColumns({
   onEdit,
   onDelete,
-}: BrandColumnsOptions = {}): ColumnDef<Brand>[] {
+}: ColumnsOptions = {}): ColumnDef<Brand>[] {
   return [
     {
       id: "select",
@@ -77,7 +78,7 @@ export function createBrandColumns({
       id: "actions",
       header: () => <div className="text-left">Actions</div>,
       cell: ({ row }) => {
-        const brand = row.original;
+        const obj = row.original;
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -89,20 +90,20 @@ export function createBrandColumns({
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(brand._id)}
+                onClick={() => navigator.clipboard.writeText(obj._id)}
               >
                 Copy ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               {onEdit && (
-                <DropdownMenuItem onClick={() => onEdit(brand)}>
+                <DropdownMenuItem onClick={() => onEdit(obj)}>
                   <PencilIcon className="mr-2 h-4 w-4" />
                   Edit
                 </DropdownMenuItem>
               )}
               {onDelete && (
                 <DropdownMenuItem
-                  onClick={() => onDelete(brand)}
+                  onClick={() => onDelete(obj)}
                   className="text-destructive focus:text-destructive"
                 >
                   <TrashIcon className="mr-2 h-4 w-4" />

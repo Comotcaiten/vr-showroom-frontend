@@ -3,7 +3,7 @@
 import { GenericTable } from "@/components/common/generic-table";
 import { DialogForm } from "@/components/common/dialog-form-v2";
 
-import { createBrandColumns } from "@/components/dashboard/columns/brand-columns";
+import { createColumns } from "@/components/dashboard/columns/brand-columns";
 import brandValidation from "@/validations/brand_validations";
 import { useBrand } from "@/context/brand-context";
 import { Brand } from "@/types/brand";
@@ -19,7 +19,7 @@ export default function Page() {
   const [open, setOpen] = useState(false);
   const [editingData, setEditingData] = useState<Brand | null>(null);
 
-  const columns = createBrandColumns({
+  const columns = createColumns({
     onEdit: (data) => {
       setEditingData(data);
       setOpen(true);
@@ -70,7 +70,7 @@ export default function Page() {
                 },
               ]}
               initialData={editingData}
-              title={editingData ? "Edit Brand" : "Create Brand"}
+              // title={editingData ? "Edit Brand" : "Create Brand"}
               onCreate={async (data) => {
                 const res = await create({
                   name: String(data.name),

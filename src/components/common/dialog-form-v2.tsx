@@ -139,6 +139,7 @@ function DialogFormComponent<TSchema extends z.ZodTypeAny>({
           name={field.name}
           id={`form-${String(field.name)}`}
           label={field.label}
+          type={field.type}
           placeholder={field.placeholder}
           textarea={field.textarea}
           showCount={field.showCount}
