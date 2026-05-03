@@ -71,6 +71,20 @@ export default function Page() {
                   showCount: true,
                   maxLength: 500,
                 },
+                // {
+                //   name: "select-name",
+                //   label: "select-label",
+                //   isSelect: true,
+                //   placeholder: "Select a table",
+                //   selectContent: {
+                //     defaultValue: {id: "1", value: "1", label: "1"},
+                //     items: [
+                //       {id: "1", value: "1", label: "1"},
+                //       {id: "2", value: "2", label: "2"},
+                //       {id: "3", value: "3", label: "3"},
+                //     ]
+                //   }
+                // }
               ]}
               // --------------------------------------} //
               initialData={editingData}

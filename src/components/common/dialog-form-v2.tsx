@@ -18,6 +18,7 @@ import {
 import { FieldGroup } from "@/components/ui/field";
 
 import { FieldSelectConfig, FormFieldController } from "../forms/form-field-controller";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
 
 type FieldConfig<T extends FieldValues> = {
   name: Path<T>;
@@ -135,8 +136,28 @@ function DialogFormComponent<TSchema extends z.ZodTypeAny>({
   // Memoized rendered fields to prevent unnecessary re-renders
   const renderedFields = useMemo(
     () =>
-      fields.map((field) => (
-        <FormFieldController
+      fields.map((field) => {
+        if (field.isSelect) {
+          return (
+            <Select key={String(field.name)}>
+              <SelectTrigger id={`form-${String(field.name)}`}>
+                <SelectValue placeholder={field.placeholder} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>{field.label}</SelectLabel>
+                  {field.selectContent?.items?.map((item) => (
+                    <SelectItem key={item.id} value={item.value}>
+                      {item.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          );
+        }
+
+        return (<FormFieldController
           key={String(field.name)}
           control={form.control}
           name={field.name}
@@ -148,10 +169,10 @@ function DialogFormComponent<TSchema extends z.ZodTypeAny>({
           maxLength={field.maxLength}
           helperText={field.helperText}
 
-          isSelect = {field.isSelect}
+          isSelect={field.isSelect}
           selectContent={field.selectContent}
-        />
-      )),
+        />)
+      }),
     [fields, form.control]
   );
 

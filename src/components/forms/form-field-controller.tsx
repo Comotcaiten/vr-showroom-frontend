@@ -9,15 +9,6 @@ import {
   InputGroupAddon,
   InputGroupText,
 } from "../ui/input-group";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-
 interface FormFieldControllerProps<T extends FieldValues> {
   control?: Control<T>;
   name: Path<T>;
@@ -56,9 +47,6 @@ export function FormFieldController<T extends FieldValues>({
   helperText,
   showCount = false,
   maxLength,
-
-  isSelect = false,
-  selectContent,
 }: FormFieldControllerProps<T>) {
 
   const isTextarea = type === "textarea";
@@ -75,45 +63,30 @@ export function FormFieldController<T extends FieldValues>({
             <FieldLabel htmlFor={id}>{label}</FieldLabel>
 
             <InputGroup>
-              {isSelect ? (<>
-                <Select value={field.value ?? ""} onValueChange={field.onChange}>
-                  <SelectTrigger id={id}>
-                    <SelectValue placeholder={placeholder} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {selectContent?.items?.map((item) => (
-                      <SelectItem key={item.id} value={item.value}>
-                        {item.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </>) : (<>
-                {isTextarea ? (<InputGroupTextarea
+              {isTextarea ? (<InputGroupTextarea
+                // {...field}
+                value={field.value ?? ""}
+                name={field.name}
+                id={id}
+                placeholder={placeholder}
+                required={required}
+                rows={6}
+                className="min-h-24 resize-none"
+                aria-invalid={fieldState.invalid}
+                onChange={field.onChange}
+              />) : (             // type = default
+                <InputGroupInput
                   // {...field}
                   value={field.value ?? ""}
                   name={field.name}
                   id={id}
                   placeholder={placeholder}
                   required={required}
-                  rows={6}
-                  className="min-h-24 resize-none"
                   aria-invalid={fieldState.invalid}
+                  autoComplete="off"
+                  type={type}
                   onChange={field.onChange}
-                />) : (             // type = default
-                  <InputGroupInput
-                    // {...field}
-                    value={field.value ?? ""}
-                    name={field.name}
-                    id={id}
-                    placeholder={placeholder}
-                    required={required}
-                    aria-invalid={fieldState.invalid}
-                    autoComplete="off"
-                    type={type}
-                    onChange={field.onChange}
-                  />)}
-              </>)}
+                />)}
 
               {showCount && maxLength && (
                 <InputGroupAddon align="block-end">
@@ -133,3 +106,4 @@ export function FormFieldController<T extends FieldValues>({
     />
   );
 }
+
