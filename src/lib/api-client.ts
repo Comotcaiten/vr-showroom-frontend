@@ -4,11 +4,14 @@ export async function apiClient<T>(
   endpoint: string,
   options?: RequestInit,
 ): Promise<T> {
+
+  const isFormData = options?.body instanceof FormData;
+
   const res = await fetch(`${BASE_URL}${endpoint}`, {
-    credentials: "include", // 🔥 thêm dòng này
+    credentials: "include",
     ...options,
     headers: {
-      "Content-Type": "application/json",
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
       ...options?.headers,
     },
   });

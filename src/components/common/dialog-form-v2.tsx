@@ -99,16 +99,17 @@ function DialogFormComponent<TSchema extends z.ZodTypeAny>({
           await onUpdate?.(data);
         } else {
           await onCreate?.(data);
-          // Only clear form after create, not after update (parent handles closing)
-          form.reset({} as DefaultValues<FormData>);
         }
+        form.reset({} as DefaultValues<FormData>);
+         onOpenChange?.(false);
+        
       } catch (error) {
         const err = error instanceof Error ? error : new Error("Unknown error");
         onError?.(err);
         console.error("Form submission error:", err);
       }
     },
-    [isEdit, onCreate, onUpdate, onError, form]
+    [isEdit, onCreate, onUpdate, onError, form, onOpenChange]
   );
 
   // Memoized dialog state handler - reset to empty when closing
@@ -132,6 +133,10 @@ function DialogFormComponent<TSchema extends z.ZodTypeAny>({
   const handleTriggerClick = useCallback(() => {
     onOpenChange?.(true);
   }, [onOpenChange]);
+
+  const {
+    formState: { isSubmitting },
+  } = form;
 
   // Memoized rendered fields to prevent unnecessary re-renders
   const renderedFields = useMemo(
@@ -171,9 +176,10 @@ function DialogFormComponent<TSchema extends z.ZodTypeAny>({
 
           isSelect={field.isSelect}
           selectContent={field.selectContent}
+          disabled={isSubmitting}
         />)
       }),
-    [fields, form.control]
+    [fields, form.control, isSubmitting]
   );
 
   return (
@@ -193,16 +199,21 @@ function DialogFormComponent<TSchema extends z.ZodTypeAny>({
         </DialogHeader>
         <DialogDescription>{/* Optional description space */}</DialogDescription>
 
-        <form onSubmit={form.handleSubmit(handleSubmit)} id="dialog-form">
+        <form 
+        onSubmit={form.handleSubmit(handleSubmit)} 
+        id="dialog-form" 
+        encType="multipart/form-data"
+        className={isSubmitting ? "pointer-events-none opacity-70" : ""} 
+        >
           <FieldGroup>{renderedFields}</FieldGroup>
         </form>
 
         <DialogFooter>
-          <Button variant="destructive" onClick={handleCancel}>
+          <Button variant="destructive" onClick={handleCancel} disabled={isSubmitting}>
             Cancel
           </Button>
-          <Button type="submit" form="dialog-form">
-            {isEdit ? "Update" : "Create"}
+          <Button type="submit" form="dialog-form" disabled={isSubmitting}>
+            {isSubmitting ? "Loading..." : isEdit ? "Update" : "Create"}
           </Button>
         </DialogFooter>
       </DialogContent>

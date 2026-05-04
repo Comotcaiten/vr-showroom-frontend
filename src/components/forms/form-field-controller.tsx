@@ -22,7 +22,9 @@ interface FormFieldControllerProps<T extends FieldValues> {
   maxLength?: number;
 
   isSelect?: boolean;
-  selectContent?: FieldSelectConfig
+  selectContent?: FieldSelectConfig;
+
+  disabled?: boolean;
 }
 
 export type FieldSelectItemConfig = {
@@ -47,9 +49,11 @@ export function FormFieldController<T extends FieldValues>({
   helperText,
   showCount = false,
   maxLength,
+  disabled = false,
 }: FormFieldControllerProps<T>) {
 
   const isTextarea = type === "textarea";
+  const isFile = type === "file";
 
   return (
     <Controller
@@ -57,6 +61,33 @@ export function FormFieldController<T extends FieldValues>({
       name={name}
       render={({ field, fieldState }) => {
         const valueLength = field.value?.length ?? 0;
+
+        // Handle file input separately - don't use value, only onChange
+        if (isFile) {
+          return (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={id}>{label}</FieldLabel>
+              <InputGroup>
+                <InputGroupInput
+                  name={field.name}
+                  id={id}
+                  placeholder={placeholder}
+                  required={required}
+                  aria-invalid={fieldState.invalid}
+                  type="file"
+                  onChange={(e) => {
+                    // For file input, pass the FileList to the field
+                    const files = e.target.files;
+                    field.onChange(files);
+                  }}
+                  disabled = {disabled}
+                />
+              </InputGroup>
+              {helperText && <FieldDescription>{helperText}</FieldDescription>}
+              {fieldState.error && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          );
+        }
 
         return (
           <Field data-invalid={fieldState.invalid}>
@@ -74,6 +105,7 @@ export function FormFieldController<T extends FieldValues>({
                 className="min-h-24 resize-none"
                 aria-invalid={fieldState.invalid}
                 onChange={field.onChange}
+                disabled = {disabled}
               />) : (             // type = default
                 <InputGroupInput
                   // {...field}
@@ -86,6 +118,7 @@ export function FormFieldController<T extends FieldValues>({
                   autoComplete="off"
                   type={type}
                   onChange={field.onChange}
+                  disabled = {disabled}
                 />)}
 
               {showCount && maxLength && (
