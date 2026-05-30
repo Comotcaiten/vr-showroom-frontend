@@ -57,6 +57,20 @@ export function createColumns({
         <div className="text-left font-medium">{row.getValue("_id")}</div>
       ),
     },
+    {
+      accessorKey: "fileUrl",
+      header: () => <div className="text-left">URL</div>,
+      cell: ({ row }) => (
+        <div className="text-left font-medium w-64 truncate hover:whitespace-normal cursor-pointer">{row.getValue("fileUrl")}</div>
+      ),
+    },
+    {
+      accessorKey: "fileFormat",
+      header: () => <div className="text-left">Format</div>,
+      cell: ({ row }) => (
+        <div className="text-left font-medium">{row.getValue("fileFormat")}</div>
+      ),
+    },
     // {
     //   accessorKey: "name",
     //   header: ({ column }) => (
@@ -91,6 +105,11 @@ export function createColumns({
                 onClick={() => navigator.clipboard.writeText(obj._id)}
               >
                 Copy ID
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(obj.fileUrl)}
+              >
+                Copy URL
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               {onDelete && (
