@@ -7,6 +7,8 @@ export async function apiClient<T>(
 
   const isFormData = options?.body instanceof FormData;
 
+  let data = null;
+
   const res = await fetch(`${BASE_URL}${endpoint}`, {
     credentials: "include",
     ...options,
@@ -16,16 +18,19 @@ export async function apiClient<T>(
     },
   });
 
+  const contentType = res.headers.get("content-type");
+
+  if (contentType && contentType.includes("application/json")) {
+    data = await res.json();
+  }
+
   if (!res.ok) {
     let message = "API Error";
-
-    try {
-      const error = await res.json();
-      message = error.message;
-    } catch {}
+    const error = data;
+    message = error.message;
 
     throw new Error(message);
   }
 
-  return res.json();
+  return data; // return res.json
 }

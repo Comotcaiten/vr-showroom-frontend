@@ -1,11 +1,9 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-
-import { useRouter } from "next/navigation";
-
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldGroup } from "@/components/ui/field";
+import {useRouter} from 'next/navigation'
 
 import {
   Card,
@@ -20,24 +18,21 @@ import { FormFieldController } from "@/components/forms/form-field-controller";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import * as z from "zod";
 
 import usersValidation from "@/validations/user_validations";
-import { useAuth } from "@/context/auth-context";
-
-import { authService } from "@/services/auth-service";
-
-import { useEffect } from "react";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 const SignUpSchema = usersValidation.create;
 
-export function SignupForm() {
-  const router = useRouter();
+type SignUpFormValue = z.infer<typeof SignUpSchema>;
 
-  const { user, refreshUser } = useAuth();
+export function SignUpForm() {
 
-  const form = useForm<z.infer<typeof SignUpSchema>>({
+  const router = useRouter()
+  const {signUp} = useAuthStore();
+
+  const form = useForm<SignUpFormValue>({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
       name: "",
@@ -47,24 +42,12 @@ export function SignupForm() {
     },
   });
 
-  async function onSubmit(data: z.infer<typeof SignUpSchema>) {
-    try {
-      const res = await authService.register(data);
+  const onSubmit = async(data: SignUpFormValue) => {
+    const {name, email, password, confirmPassword} = data;
+    await signUp(name, email, password, confirmPassword);
 
-      await refreshUser();
-
-      toast.success(res.message);
-      router.push("/");
-    } catch (err) {
-      toast.error("Register failed");
-    }
+    router.push("/");
   }
-
-  useEffect(() => {
-    if (user != null) {
-      router.push("/");
-    }
-  });
 
   return (
     <Card className="w-full sm:max-w-md">
