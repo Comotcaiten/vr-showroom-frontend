@@ -18,19 +18,26 @@ export async function apiClient<T>(
     },
   });
 
-  const contentType = res.headers.get("content-type");
+  if (res.status !== 204 && res.status !== 205) {
+    const contentType = res.headers.get("content-type");
 
-  if (contentType && contentType.includes("application/json")) {
-    data = await res.json();
+    if (contentType && contentType.includes("application/json")) {
+      try {
+        data = await res.json();
+      }
+      catch (err) {
+        console.log(err);
+        data = null;
+      }
+    }
   }
 
-  if (!res.ok) {
-    let message = "API Error";
-    const error = data;
-    message = error.message;
 
+  if (!res.ok) {
+    const error = data;
+    let message = error?.message || `API Error: Request failed with status ${res.status}`;
     throw new Error(message);
   }
 
-  return data; // return res.json
+  return data as T; // return res.json
 }

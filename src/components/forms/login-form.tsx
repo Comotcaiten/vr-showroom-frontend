@@ -19,7 +19,6 @@ import { FormFieldController } from "@/components/forms/form-field-controller";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import * as z from "zod";
 
 import usersValidation from "@/validations/user_validations";
@@ -45,9 +44,11 @@ export function LoginForm() {
 
   const onSubmit = async (data: LoginFormValue) => {
     const {email, password} = data;
-    await singIn(email, password);
-
-    // router.push("/");
+    const ok = await singIn(email, password);
+    
+    if (ok) router.push("/");
+    form.setError("email", {type: "custom"});
+    form.setError("password", {type: "custom"});
   }
 
   return (

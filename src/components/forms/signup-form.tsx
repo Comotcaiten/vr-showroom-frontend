@@ -44,9 +44,12 @@ export function SignUpForm() {
 
   const onSubmit = async(data: SignUpFormValue) => {
     const {name, email, password, confirmPassword} = data;
-    await signUp(name, email, password, confirmPassword);
-
-    router.push("/");
+    const ok = await signUp(name, email, password, confirmPassword);
+    if (ok) router.push("/");
+    form.setError("name", {type: "custom"});
+    form.setError("email", {type: "custom"});
+    form.setError("password", {type: "custom"});
+    form.setError("confirmPassword", {type: "custom"});
   }
 
   return (
