@@ -5,17 +5,16 @@ import { DialogForm } from "@/components/common/dialog-form-v2";
 
 import { createColumns } from "@/components/dashboard/columns/brand-columns";
 import brandValidation from "@/validations/brand_validations";
-import { useBrand } from "@/context/brand-context";
 import { Brand } from "@/types/brand";
 
-import { useState } from "react";
-import { toast } from "sonner";
+import { useEffect, useState } from "react";
+import { useBrandStore } from "@/stores/useBrandStore";
 
 const title = "Brands";
 const schema = brandValidation.create;
 
 export default function Page() {
-  const { isLoading, data, create, update, remove } = useBrand();
+  const {loading, data, createBrand, updateBrand, removeBrand, getBrands} = useBrandStore();
   const [open, setOpen] = useState(false);
   const [editingData, setEditingData] = useState<Brand | null>(null);
 
@@ -25,17 +24,19 @@ export default function Page() {
       setOpen(true);
     },
     onDelete: async (data) => {
-      const res = await remove(data._id);
-
-      toast.success(res.message);
+      await removeBrand(data._id);
     },
   });
+
+  useEffect(() => {
+    getBrands();
+  }, [])
 
   return (
     <main className="min-h-screen flex-row items-center">
       <section className="flex items-center">{title}</section>
 
-      {isLoading ? (
+      {loading ? (
         <h1>...Loading</h1>
       ) : (
         <GenericTable
@@ -72,23 +73,23 @@ export default function Page() {
               initialData={editingData}
               // title={editingData ? "Edit Brand" : "Create Brand"}
               onCreate={async (data) => {
-                const res = await create({
-                  name: String(data.name),
-                  description: data.description,
-                });
+                const success = await createBrand(
+                  data.name || '',
+                  data.description || '',
+                  ''
+                );
 
-                toast.success(res.message);
+                if (success) {
+                  setOpen(false);
+                }
               }}
               onUpdate={async (data) => {
                 if (!editingData) return;
-
-                const res = await update(editingData._id, {
-                  name: String(data.name),
-                  description: data.description,
-                });
-                toast.success(res.message);
-                setOpen(false);
-                setEditingData(null);
+                const success = await updateBrand(editingData._id, data.name || '', data.description || '', '');
+                
+                if (success) {
+                  setOpen(false);
+                }
               }}
             />
           }
