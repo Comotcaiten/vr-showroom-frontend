@@ -1,4 +1,5 @@
 import { Brand } from "./brand";
+import { Category } from "./category";
 import { User } from "./user";
 
 export interface AuthState {
@@ -20,4 +21,14 @@ export interface BrandState {
     createBrand: (name: string, description: string, logoUrl: string) => Promise<boolean>;
     updateBrand: (id: string, name: string, description: string, logoUrl: string) => Promise<boolean>;
     removeBrand: (id: string) => Promise<void>;
+}
+
+export interface CategoryState {
+    data: Category[];
+    loading: boolean;
+
+    getCategorys: () => Promise<void>;
+    createCategory: (name: string, description: string, categoryUrl: string) => Promise<boolean>;
+    updateCategory: (id: string, name: string, description: string, categoryUrl: string) => Promise<boolean>;
+    removeCategory: (id: string) => Promise<void>;
 }
