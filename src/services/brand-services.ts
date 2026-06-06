@@ -2,25 +2,23 @@
 import { apiClient } from "@/lib/api-client";
 import { ApiResponse } from "@/types/api-response";
 
-import { Brand, CreateBrandDto } from "@/types/brand";
+import { Brand } from "@/types/brand";
 
 export const brandService = {
   getAll: async (): Promise<ApiResponse<Brand[]>> => {
     return await apiClient<ApiResponse<Brand[]>>("/brands");
   },
 
-  create: async (data: CreateBrandDto): Promise<ApiResponse<Brand>> => {
+  create: async (data: {name: string, description: string, logoUrl: string}): Promise<ApiResponse<Brand>> => {
     return await apiClient<ApiResponse<Brand>>("/brands", {
       method: "POST",
       body: JSON.stringify(data),
     });
   },
 
-  update: async (
-    id: string,
-    data: CreateBrandDto,
+  update: async ( data: {id: string, name: string, description: string, logoUrl: string}
   ): Promise<ApiResponse<Brand>> => {
-    return await apiClient<ApiResponse<Brand>>(`/brands/${id}`, {
+    return await apiClient<ApiResponse<Brand>>(`/brands/${data.id}`, {
       method: "PUT",
       body: JSON.stringify(data),
     });

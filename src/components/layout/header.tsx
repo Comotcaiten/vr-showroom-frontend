@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/sheet";
 import Logo from "@/components/common/logo";
 import AuthContainer from "@/components/common/auth-container";
-import { useAuth } from "@/context/auth-context";
 
 const NavLink = ({
   label,

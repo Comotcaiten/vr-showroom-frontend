@@ -17,7 +17,8 @@ import {
 } from "@/components/ui/dialog";
 import { FieldGroup } from "@/components/ui/field";
 
-import { FormFieldController } from "../forms/form-field-controller";
+import { FieldSelectConfig, FormFieldController } from "../forms/form-field-controller";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
 
 type FieldConfig<T extends FieldValues> = {
   name: Path<T>;
@@ -29,6 +30,9 @@ type FieldConfig<T extends FieldValues> = {
   textarea?: boolean;
   showCount?: boolean;
   maxLength?: number;
+
+  isSelect?: boolean;
+  selectContent?: FieldSelectConfig
 };
 
 type DialogFormProps<TSchema extends z.ZodTypeAny> = {
@@ -95,16 +99,17 @@ function DialogFormComponent<TSchema extends z.ZodTypeAny>({
           await onUpdate?.(data);
         } else {
           await onCreate?.(data);
-          // Only clear form after create, not after update (parent handles closing)
-          form.reset({} as DefaultValues<FormData>);
         }
+        form.reset({} as DefaultValues<FormData>);
+         onOpenChange?.(false);
+        
       } catch (error) {
         const err = error instanceof Error ? error : new Error("Unknown error");
         onError?.(err);
         console.error("Form submission error:", err);
       }
     },
-    [isEdit, onCreate, onUpdate, onError, form]
+    [isEdit, onCreate, onUpdate, onError, form, onOpenChange]
   );
 
   // Memoized dialog state handler - reset to empty when closing
@@ -129,11 +134,35 @@ function DialogFormComponent<TSchema extends z.ZodTypeAny>({
     onOpenChange?.(true);
   }, [onOpenChange]);
 
+  const {
+    formState: { isSubmitting },
+  } = form;
+
   // Memoized rendered fields to prevent unnecessary re-renders
   const renderedFields = useMemo(
     () =>
-      fields.map((field) => (
-        <FormFieldController
+      fields.map((field) => {
+        if (field.isSelect) {
+          return (
+            <Select key={String(field.name)}>
+              <SelectTrigger id={`form-${String(field.name)}`}>
+                <SelectValue placeholder={field.placeholder} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>{field.label}</SelectLabel>
+                  {field.selectContent?.items?.map((item) => (
+                    <SelectItem key={item.id} value={item.value}>
+                      {item.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          );
+        }
+
+        return (<FormFieldController
           key={String(field.name)}
           control={form.control}
           name={field.name}
@@ -141,13 +170,16 @@ function DialogFormComponent<TSchema extends z.ZodTypeAny>({
           label={field.label}
           type={field.type}
           placeholder={field.placeholder}
-          textarea={field.textarea}
           showCount={field.showCount}
           maxLength={field.maxLength}
           helperText={field.helperText}
-        />
-      )),
-    [fields, form.control]
+
+          isSelect={field.isSelect}
+          selectContent={field.selectContent}
+          disabled={isSubmitting}
+        />)
+      }),
+    [fields, form.control, isSubmitting]
   );
 
   return (
@@ -167,16 +199,21 @@ function DialogFormComponent<TSchema extends z.ZodTypeAny>({
         </DialogHeader>
         <DialogDescription>{/* Optional description space */}</DialogDescription>
 
-        <form onSubmit={form.handleSubmit(handleSubmit)} id="dialog-form">
+        <form 
+        onSubmit={form.handleSubmit(handleSubmit)} 
+        id="dialog-form" 
+        encType="multipart/form-data"
+        className={isSubmitting ? "pointer-events-none opacity-70" : ""} 
+        >
           <FieldGroup>{renderedFields}</FieldGroup>
         </form>
 
         <DialogFooter>
-          <Button variant="destructive" onClick={handleCancel}>
+          <Button variant="destructive" onClick={handleCancel} disabled={isSubmitting}>
             Cancel
           </Button>
-          <Button type="submit" form="dialog-form">
-            {isEdit ? "Update" : "Create"}
+          <Button type="submit" form="dialog-form" disabled={isSubmitting}>
+            {isSubmitting ? "Loading..." : isEdit ? "Update" : "Create"}
           </Button>
         </DialogFooter>
       </DialogContent>
