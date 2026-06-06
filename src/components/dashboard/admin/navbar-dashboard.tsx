@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import AuthContainer from "../common/auth-container";
+import AuthContainer from "../../common/auth-container";
 
 export default function NavbarDashboard() {
   return (

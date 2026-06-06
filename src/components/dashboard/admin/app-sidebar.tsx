@@ -29,15 +29,17 @@ import {
   Settings,
   ArmchairIcon,
   TagIcon,
+  BoxIcon
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Logo from "../common/logo";
+import Logo from "../../common/logo";
 
 const NAV_MAIN = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Brands", href: "/dashboard/brands", icon: Package },
   { label: "Categories", href: "/dashboard/categories", icon: TagIcon },
+  { label: "Model-3D", href: "/dashboard/models", icon: BoxIcon },
   { label: "Furnitures", href: "/dashboard/furnitures", icon: ArmchairIcon },
   { label: "Orders", href: "/dashboard/orders", icon: ShoppingCart },
   { label: "Customers", href: "/dashboard/customers", icon: Users },

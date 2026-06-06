@@ -3,22 +3,22 @@
 import { Button } from "../ui/button";
 import Link from "next/link";
 import AvartarContainer from "./avartar-container";
-import { useAuth } from "@/context/auth-context";
 import ThemeToggle from "./theme-toggle";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 function AuthContainer() {
-  const { user, isLoading, isAuthenticated } = useAuth();
+  const {user} = useAuthStore();
 
-  if (isLoading) {
-    return (
-      <div className="hidden md:flex items-center gap-2 shrink-0">loading</div>
-    );
-  }
+  // if (!user) {
+  //   return (
+  //     <div className="hidden md:flex items-center gap-2 shrink-0">loading</div>
+  //   );
+  // }
 
   return (
     <div className="flex items-center gap-2 shrink-0">
       <ThemeToggle />
-      {isAuthenticated ? (
+      {user != null ? (
         <>
           <span className="hidden md:flex">Xin chào {user?.name}</span>
           <AvartarContainer />

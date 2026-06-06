@@ -12,4 +12,4 @@ export interface Brand {
   updatedAt: string;
 }
 
-export type CreateBrandDto = z.infer<typeof brandValidation.create>;
+// export type CreateBrandDto = z.infer<typeof brandValidation.create>;

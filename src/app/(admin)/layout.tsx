@@ -1,6 +1,6 @@
 "use client";
-import { AppSidebar } from "@/components/admin/app-sidebar";
-import NavbarDashboard from "@/components/admin/navbar-dashboard";
+import { AppSidebar } from "@/components/dashboard/admin/app-sidebar";
+import NavbarDashboard from "@/components/dashboard/admin/navbar-dashboard";
 // app/src/(admin)/dashboard/layout.tsx
 import { SidebarProvider } from "@/components/ui/sidebar";
 

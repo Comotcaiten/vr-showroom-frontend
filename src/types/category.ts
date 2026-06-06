@@ -1,3 +1,4 @@
+import categoryValidation from "@/validations/category_validations";
 import z from "zod";
 
 // src/types/category.ts
@@ -11,4 +12,4 @@ export interface Category {
   updatedAt: string;
 }
 
-// export type CreateCategoryDto = z.infer<typeof category.create>;
+export type CreateCategoryDto = z.infer<typeof categoryValidation.create>;
