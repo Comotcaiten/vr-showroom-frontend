@@ -71,6 +71,44 @@ export function createColumns({
         <div className="text-left font-medium">{row.getValue("fileFormat")}</div>
       ),
     },
+    {
+      accessorKey: "fileSize",
+      header: () => <div className="text-left">Size</div>,
+      cell: ({ row }) => {
+        const bytes = Number(row.getValue("fileSize"));
+
+        // Helper to format bytes to human-readable string
+        const formatFileSize = (bytesNum: number): string => {
+          if (!bytesNum || isNaN(bytesNum)) return "0 Bytes";
+
+          const k = 1024;
+          const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+
+          // Calculate which unit fits best
+          const i = Math.floor(Math.log(bytesNum) / Math.log(k));
+
+          // For bytes, don't show decimals. For KB/MB, show up to 1 decimal place if needed
+          const decimalPlaces = i === 0 ? 0 : 1;
+          const formattedValue = (bytesNum / Math.pow(k, i)).toFixed(decimalPlaces);
+
+          // Remove trailing .0 if it's a whole number
+          return `${parseFloat(formattedValue)} ${sizes[i]}`;
+        };
+
+        return (
+          <div className="text-left font-medium">
+            {formatFileSize(bytes)}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "createdAt",
+      header: () => <div className="text-left">Size</div>,
+      cell: ({ row }) => (
+        <div className="text-left font-medium">{new Date(row.getValue("createdAt")).toLocaleDateString('vi-VN', { timeZone: 'UTC' })}</div>
+      ),
+    },
     // {
     //   accessorKey: "name",
     //   header: ({ column }) => (

@@ -5,33 +5,34 @@ import { DialogForm } from "@/components/common/dialog-form-v2";
 // {-------------------------------------- //
 import { createColumns } from "@/components/dashboard/columns/model-columns";
 import Validation from "@/validations/model_validation";
-import { useModel } from "@/context/model-context";
 // --------------------------------------} //
-import { useState } from "react";
-import { toast } from "sonner";
+import { useEffect, useState } from "react";
+import { useModelStore } from "@/stores/useModelStore";
 
 const title = "Models";
 const schema = Validation.create;
 
 export default function Page() {
   // {-------------------------------------- //
-  const { isLoading, data, create, remove } = useModel();
+  const { loading, data, createModel, removeModel, getModels } = useModelStore();
   const [open, setOpen] = useState(false);
   // --------------------------------------} //
 
   const columns = createColumns({
     onDelete: async (data) => {
-      const res = await remove(data._id);
-
-      toast.success(res.message);
+      const success = await removeModel(data._id);
     },
   });
+
+  useEffect(() => {
+    getModels();
+  }, []);
 
   return (
     <main className="min-h-screen flex-row items-center">
       <section className="flex items-center">{title}</section>
 
-      {isLoading ? (
+      {loading ? (
         <h1>...Loading</h1>
       ) : (
         <GenericTable
@@ -60,7 +61,7 @@ export default function Page() {
               // --------------------------------------} //
               onCreate={async (data) => {
                 let file: File | null = null;
-                
+
                 // Handle FileList (from file input)
                 if (data.file instanceof FileList) {
                   file = data.file[0] || null;
@@ -73,15 +74,15 @@ export default function Page() {
                 else if (Array.isArray(data.file) && data.file[0] instanceof File) {
                   file = data.file[0];
                 }
-                
+
                 if (!file) {
-                  toast.error("Please select a file");
                   return;
                 }
-                
-                const res = await create(file);
-                toast.success(res.message);
-                setOpen(false);
+
+                const success = await createModel(file);
+                if (success) {
+                  setOpen(false);
+                }
               }}
             />
           }

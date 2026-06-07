@@ -1,6 +1,7 @@
 import { Brand } from "./brand";
 import { Category } from "./category";
 import { User } from "./user";
+import { Model } from "./model";
 
 export interface AuthState {
     accessToken: string | null;
@@ -31,4 +32,13 @@ export interface CategoryState {
     createCategory: (name: string, description: string, categoryUrl: string) => Promise<boolean>;
     updateCategory: (id: string, name: string, description: string, categoryUrl: string) => Promise<boolean>;
     removeCategory: (id: string) => Promise<void>;
+}
+
+export interface ModelState {
+    data: Model[];
+    loading: boolean;
+
+    getModels: () => Promise<void>;
+    createModel: (file: File) => Promise<boolean>;
+    removeModel: (id: string) => Promise<void>;
 }
