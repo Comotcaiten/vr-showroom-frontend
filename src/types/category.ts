@@ -11,5 +11,3 @@ export interface Category {
   createdAt: string;
   updatedAt: string;
 }
-
-export type CreateCategoryDto = z.infer<typeof categoryValidation.create>;

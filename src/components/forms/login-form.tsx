@@ -19,24 +19,22 @@ import { FormFieldController } from "@/components/forms/form-field-controller";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import * as z from "zod";
 
 import usersValidation from "@/validations/user_validations";
-import { useAuth } from "@/context/auth-context";
-
-import { authService } from "@/services/auth-service";
-
-import { useEffect } from "react";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 const LoginSchema = usersValidation.login;
+type LoginFormValue = z.infer<typeof LoginSchema>;
 
 export function LoginForm() {
-  const router = useRouter();
 
-  const { user, refreshUser } = useAuth();
+  const {singIn} = useAuthStore();
+  const router = useRouter()
 
-  const form = useForm<z.infer<typeof LoginSchema>>({
+  // const { user, refreshUser } = useAuth();
+
+  const form = useForm<LoginFormValue>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: "",
@@ -44,24 +42,14 @@ export function LoginForm() {
     },
   });
 
-  async function onSubmit(data: z.infer<typeof LoginSchema>) {
-    try {
-      const res = await authService.login(data);
-
-      await refreshUser();
-
-      toast.success(res.message);
-      router.push("/");
-    } catch (err) {
-      toast.error("Login failed");
-    }
+  const onSubmit = async (data: LoginFormValue) => {
+    const {email, password} = data;
+    const ok = await singIn(email, password);
+    
+    if (ok) router.push("/");
+    form.setError("email", {type: "custom"});
+    form.setError("password", {type: "custom"});
   }
-
-  useEffect(() => {
-    if (user != null) {
-      router.push("/");
-    }
-  });
 
   return (
     <Card className="w-full sm:max-w-md">

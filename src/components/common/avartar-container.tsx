@@ -8,7 +8,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAuth } from "@/context/auth-context";
 import {
   LogOutIcon,
   MonitorCheckIcon,
@@ -17,18 +16,17 @@ import {
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/stores/useAuthStore";
 
-// { setIsSignedIn }: { setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>> }
 export default function AvartarContainer() {
   const router = useRouter();
+  const {user, signOut} = useAuthStore();
 
-  const { logout, user, isLoading, isAuthenticated } = useAuth();
-
-  if (isLoading) {
-    return (
-      <div className="hidden md:flex items-center gap-2 shrink-0">loading</div>
-    );
+  const onSignOut = async () => {
+    await signOut();
+    router.prefetch;
   }
+
 
   return (
     <DropdownMenu>
@@ -56,7 +54,7 @@ export default function AvartarContainer() {
             <SettingsIcon className="mr-2 h-4 w-4" />
             Settings
           </DropdownMenuItem>
-          {isAuthenticated && user?.role == "admin" ? (
+          {true && user?.role == "admin" ? (
             <>
               <DropdownMenuItem
                 onClick={() => {
@@ -72,7 +70,7 @@ export default function AvartarContainer() {
           )}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem variant="destructive" onClick={logout}>
+        <DropdownMenuItem variant="destructive" onClick={onSignOut}>
           <LogOutIcon className="mr-2 h-4 w-4" />
           Log out
         </DropdownMenuItem>
