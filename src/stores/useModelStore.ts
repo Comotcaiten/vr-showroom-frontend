@@ -4,14 +4,14 @@ import { toast } from "sonner";
 import { create } from "zustand";
 
 export const useModelStore = create<ModelState>((set, get) => ({
-    data: [],
+    dataModel: [],
     loading: false,
 
     getModels: async () => {
         try {
             set({ loading: true });
             const res = await modelService.getAll();
-            set({ data: res.data });
+            set({ dataModel: res.data });
         } catch (err) {
             console.log(err);
         } finally {

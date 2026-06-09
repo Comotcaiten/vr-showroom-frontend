@@ -4,14 +4,14 @@ import { toast } from "sonner";
 import { create } from "zustand";
 
 export const useCategoryStore = create<CategoryState>((set, get) => ({
-    data: [],
+    dataCategory: [],
     loading: false,
 
     getCategorys: async () => {
         try {
             set({ loading: true });
             const res = await categoryService.getAll();
-            set({ data: res.data });
+            set({ dataCategory: res.data });
         } catch (err) {
             console.log(err);
         } finally {

@@ -2,6 +2,7 @@ import { Brand } from "./brand";
 import { Category } from "./category";
 import { User } from "./user";
 import { Model } from "./model";
+import { Furniture } from "./furniture";
 
 export interface AuthState {
     accessToken: string | null;
@@ -15,7 +16,7 @@ export interface AuthState {
 }
 
 export interface BrandState {
-    data: Brand[];
+    dataBrand: Brand[];
     loading: boolean;
 
     getBrands: () => Promise<void>;
@@ -25,7 +26,7 @@ export interface BrandState {
 }
 
 export interface CategoryState {
-    data: Category[];
+    dataCategory: Category[];
     loading: boolean;
 
     getCategorys: () => Promise<void>;
@@ -35,10 +36,39 @@ export interface CategoryState {
 }
 
 export interface ModelState {
-    data: Model[];
+    dataModel: Model[];
     loading: boolean;
 
     getModels: () => Promise<void>;
     createModel: (file: File) => Promise<boolean>;
     removeModel: (id: string) => Promise<void>;
+}
+
+export interface FurnitureState {
+    dataFurniture: Furniture[];
+    loading: boolean;
+
+    getFurnitures: () => Promise<void>;
+    createFurniture: (
+        name: string, 
+        description: string, 
+        categoryId: string, 
+        brandId: string, 
+        price: Number, 
+        quantity: Number, 
+        modelId: string, 
+        thumbnailUrl: string
+    ) => Promise<boolean>;
+    updateFurniture: (
+        id: String,
+        name: string, 
+        description: string, 
+        categoryId: string, 
+        brandId: string, 
+        price: Number, 
+        quantity: Number, 
+        modelId: string, 
+        thumbnailUrl: string
+    ) => Promise<boolean>;
+    removeFurniture: (id: String) => Promise<void>;
 }

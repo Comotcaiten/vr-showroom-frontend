@@ -5,14 +5,14 @@ import { toast } from "sonner";
 import { create } from "zustand";
 
 export const useBrandStore = create<BrandState>((set, get) => ({
-  data: [],
+  dataBrand: [],
   loading: false,
 
   getBrands: async () => {
     try {
       set({ loading: true });
       const res = await brandService.getAll();
-      set({ data: res.data });
+      set({ dataBrand: res.data });
     } catch (err) {
       console.log(err);
     } finally {

@@ -1,6 +1,7 @@
 // src/types/model.ts
 export interface Model {
   _id: string;
+  name: string;
   fileUrl: string;
   fileFormat: string;
   fileSize?: number;
