@@ -40,7 +40,7 @@ export interface ModelState {
     loading: boolean;
 
     getModels: () => Promise<void>;
-    createModel: (file: File) => Promise<boolean>;
+    createModel: (name: string, file: File) => Promise<boolean>;
     removeModel: (id: string) => Promise<void>;
 }
 
@@ -49,6 +49,7 @@ export interface FurnitureState {
     loading: boolean;
 
     getFurnitures: () => Promise<void>;
+    getFurnitureById: (id: string) => Promise<Furniture>;
     createFurniture: (
         name: string, 
         description: string, 
@@ -60,7 +61,7 @@ export interface FurnitureState {
         thumbnailUrl: string
     ) => Promise<boolean>;
     updateFurniture: (
-        id: String,
+        id: string,
         name: string, 
         description: string, 
         categoryId: string, 
@@ -70,5 +71,5 @@ export interface FurnitureState {
         modelId: string, 
         thumbnailUrl: string
     ) => Promise<boolean>;
-    removeFurniture: (id: String) => Promise<void>;
+    removeFurniture: (id: string) => Promise<void>;
 }

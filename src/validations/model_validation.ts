@@ -3,6 +3,7 @@ import { z } from "zod";
 class ModelValidation {
   // CREATE (only file is required)
   create = z.object({
+    name: z.string().min(1, "name is required"),
     file: z
       .any()
       .refine((val) => {

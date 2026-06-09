@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-import { HomeIcon, LucideIcon, Menu, X } from "lucide-react";
+import { HomeIcon, LucideIcon, Menu, X, ArmchairIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -125,9 +125,9 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const NAV_ITEMS = [
-    { label: "Brand", href: "/brand", icon: HomeIcon },
-    { label: "Item 2", href: "/item-2", icon: HomeIcon },
-    { label: "Item 3", href: "/item-3", icon: HomeIcon },
+    { label: "Home", href: "/", icon: HomeIcon },
+    { label: "Furnitures", href: "/furnitures", icon: ArmchairIcon },
+    // { label: "Item 3", href: "/item-3", icon: HomeIcon },
   ];
 
   return (

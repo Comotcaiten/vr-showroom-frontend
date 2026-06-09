@@ -19,10 +19,10 @@ export const useModelStore = create<ModelState>((set, get) => ({
         }
     },
 
-    createModel: async (file) => {
+    createModel: async (name, file) => {
         try {
             set({ loading: true });
-            const res = await modelService.create(file);
+            const res = await modelService.create(name, file);
             await get().getModels();
             toast.success(res.message);
 

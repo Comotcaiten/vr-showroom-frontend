@@ -28,12 +28,12 @@ class FurnitureValidation {
 
     brandId: z.string().optional(),
 
-    price: z
+    price: z.coerce
       .number()
       .min(0, "Price must be >= 0")
       .optional(),
 
-    quantity: z
+    quantity: z.coerce
       .number()
       .min(0, "Quantity must be >= 0")
       .optional(),
@@ -45,7 +45,6 @@ class FurnitureValidation {
     thumbnailUrl: z
       .string()
       .trim()
-      .max(255, "Thumbnail URL must be at most 255 characters.")
       .optional()
       .or(z.literal("")), // allow("")
   });
