@@ -14,7 +14,7 @@ const schema = Validation.create;
 
 export default function Page() {
   // {-------------------------------------- //
-  const { loading, data, createModel, removeModel, getModels } = useModelStore();
+  const { loading, dataModel, createModel, removeModel, getModels } = useModelStore();
   const [open, setOpen] = useState(false);
   // --------------------------------------} //
 
@@ -37,7 +37,7 @@ export default function Page() {
       ) : (
         <GenericTable
           columns={columns}
-          data={data}
+          data={dataModel}
           has_visibility={true}
           dialogForm={
             <DialogForm

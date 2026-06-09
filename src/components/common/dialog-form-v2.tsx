@@ -15,7 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { FieldGroup } from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 
 import { FieldSelectConfig, FormFieldController } from "../forms/form-field-controller";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
@@ -144,6 +144,7 @@ function DialogFormComponent<TSchema extends z.ZodTypeAny>({
       fields.map((field) => {
         if (field.isSelect) {
           return (
+            // <FieldLabel htmlFor={`form-${String(field.name)}`}>{field.label}</FieldLabel>
             <Select key={String(field.name)}>
               <SelectTrigger id={`form-${String(field.name)}`}>
                 <SelectValue placeholder={field.placeholder} />

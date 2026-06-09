@@ -14,7 +14,7 @@ const title = "Brands";
 const schema = brandValidation.create;
 
 export default function Page() {
-  const {loading, data, createBrand, updateBrand, removeBrand, getBrands} = useBrandStore();
+  const {loading, dataBrand, createBrand, updateBrand, removeBrand, getBrands} = useBrandStore();
   const [open, setOpen] = useState(false);
   const [editingData, setEditingData] = useState<Brand | null>(null);
 
@@ -41,7 +41,7 @@ export default function Page() {
       ) : (
         <GenericTable
           columns={columns}
-          data={data}
+          data={dataBrand}
           filter_column="name"
           has_visibility={true}
           dialogForm={

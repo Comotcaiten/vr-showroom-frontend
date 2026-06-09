@@ -15,7 +15,7 @@ const schema = Validation.create;
 
 export default function Page() {
   // {-------------------------------------- //
-  const { loading, data, createCategory, updateCategory, removeCategory, getCategorys } = useCategoryStore();
+  const { loading, dataCategory, createCategory, updateCategory, removeCategory, getCategorys } = useCategoryStore();
   const [open, setOpen] = useState(false);
   const [editingData, setEditingData] = useState<Category | null>(null);
   // --------------------------------------} //
@@ -43,7 +43,7 @@ export default function Page() {
       ) : (
         <GenericTable
           columns={columns}
-          data={data}
+          data={dataCategory}
           filter_column="name"
           has_visibility={true}
           dialogForm={
