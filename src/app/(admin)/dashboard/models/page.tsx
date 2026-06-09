@@ -52,6 +52,12 @@ export default function Page() {
               // {-------------------------------------- //
               fields={[
                 {
+                  name: "name",
+                  label: "Name Model",
+                  type: "text",
+                  helperText: "Name your model file",
+                },
+                {
                   name: "file",
                   label: "Model file",
                   type: "file",
@@ -79,7 +85,7 @@ export default function Page() {
                   return;
                 }
 
-                const success = await createModel(file);
+                const success = await createModel(data.name, file);
                 if (success) {
                   setOpen(false);
                 }

@@ -83,7 +83,7 @@ export default function Page() {
                                     maxLength: 500,
                                 },
                                 {
-                                    name: "slect-categoryId",
+                                    name: "categoryId",
                                     label: "CategoryID",
                                     isSelect: true,
                                     placeholder: "Select CategoryID",
@@ -99,7 +99,7 @@ export default function Page() {
                                     }
                                 },
                                 {
-                                    name: "slect-brandId",
+                                    name: "brandId",
                                     label: "BrandID",
                                     isSelect: true,
                                     placeholder: "Select BrandID",
@@ -115,7 +115,7 @@ export default function Page() {
                                     }
                                 },
                                 {
-                                    name: "slect-modelId",
+                                    name: "modelId",
                                     label: "ModelID",
                                     isSelect: true,
                                     placeholder: "Select ModelID",
@@ -125,10 +125,15 @@ export default function Page() {
                                             return {
                                                 id: item._id,
                                                 value: item._id,
-                                                label: item._id,
+                                                label: item.name,
                                             }
                                         })
                                     }
+                                },
+                                {
+                                    name: "thumbnailUrl",
+                                    label: "ThumbnailUrl",
+                                    type: "url",
                                 },
                                 {
                                     name: "price",
@@ -145,12 +150,13 @@ export default function Page() {
                             initialData={editingData}
                             // title={editingData ? "Edit Brand" : "Create Brand"}
                             onCreate={async (data) => {
+                                console.log("DATA SUBMIT:", data);
                                 const success = await createFurniture(
                                     data.name || "",
                                     data.description || "",
                                     data.categoryId,
                                     data.brandId,
-                                    data.price,
+                                    data.price || 0,
                                     data.quantity || 0,
                                     data.modelId || "",
                                     data.thumbnailUrl || ""
@@ -167,7 +173,7 @@ export default function Page() {
                                     data.description || "",
                                     data.categoryId,
                                     data.brandId,
-                                    data.price,
+                                    data.price || 0,
                                     data.quantity || 0,
                                     data.modelId || "",
                                     data.thumbnailUrl || ""

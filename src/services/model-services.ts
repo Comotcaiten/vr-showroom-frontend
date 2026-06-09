@@ -9,9 +9,10 @@ export const modelService = {
     return await apiClient<ApiResponse<Model[]>>("/models");
   },
 
-  create: async (file: File): Promise<ApiResponse<Model>> => {
+  create: async (name: string, file: File): Promise<ApiResponse<Model>> => {
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("name", name);
     return await apiClient<ApiResponse<Model>>("/models", {
       method: "POST",
       body: formData,

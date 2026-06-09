@@ -9,6 +9,12 @@ export const furnitureService = {
         return res;
     },
 
+    getById: async (id: string): Promise<ApiResponse<Furniture>> => {
+        const res = await apiClient<ApiResponse<Furniture>>(`${path}/${id}`);
+
+        return res;
+    },
+
     create: async (data: {
         name: string,
         description: string,

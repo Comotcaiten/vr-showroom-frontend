@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useCallback, useMemo, useEffect } from "react";
-import { useForm, DefaultValues, FieldValues, Path } from "react-hook-form";
+import { useForm, DefaultValues, FieldValues, Path, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { PlusIcon } from "lucide-react";
@@ -144,25 +144,33 @@ function DialogFormComponent<TSchema extends z.ZodTypeAny>({
       fields.map((field) => {
         if (field.isSelect) {
           return (
-            // <FieldLabel htmlFor={`form-${String(field.name)}`}>{field.label}</FieldLabel>
-            <Select key={String(field.name)}>
-              <SelectTrigger id={`form-${String(field.name)}`}>
-                <SelectValue placeholder={field.placeholder} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>{field.label}</SelectLabel>
-                  {field.selectContent?.items?.map((item) => (
-                    <SelectItem key={item.id} value={item.value}>
-                      {item.label}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <Controller
+              key={String(field.name)}
+              control={form.control}
+              name={field.name}
+              render={({ field: controllerField }) => (
+                <Select
+                  value={controllerField.value}
+                  onValueChange={controllerField.onChange}
+                >
+                  <SelectTrigger id={`form-${String(field.name)}`}>
+                    <SelectValue placeholder={field.placeholder} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>{field.label}</SelectLabel>
+                      {field.selectContent?.items?.map((item) => (
+                        <SelectItem key={item.id} value={item.value}>
+                          {item.label}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              )}
+            />
           );
         }
-
         return (<FormFieldController
           key={String(field.name)}
           control={form.control}

@@ -3,6 +3,7 @@ import { Model } from "@/types/model";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   MoreHorizontal,
+  PencilIcon,
   TrashIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -23,6 +24,7 @@ type ColumnsOptions = {
 };
 
 export function createColumns({
+  onEdit,
   onDelete,
 }: ColumnsOptions = {}): ColumnDef<Furniture>[] {
   return [
@@ -140,6 +142,12 @@ export function createColumns({
                 Copy modelId
               </DropdownMenuItem>
               <DropdownMenuSeparator />
+              {onEdit && (
+                <DropdownMenuItem onClick={() => onEdit(obj)}>
+                  <PencilIcon className="mr-2 h-4 w-4" />
+                  Edit
+                </DropdownMenuItem>
+              )}
               {onDelete && (
                 <DropdownMenuItem
                   onClick={() => onDelete(obj)}
